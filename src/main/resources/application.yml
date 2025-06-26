@@ -1,0 +1,7 @@
+spring:
+    application:
+      name: quiz
+    profiles:
+        active: dev
+    jpa:
+      open-in-view: false
