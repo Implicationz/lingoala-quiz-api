@@ -8,6 +8,7 @@ import com.lingosphinx.quiz.repository.SubjectRepository;
 import com.lingosphinx.quiz.repository.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
+    @Cacheable("subjects")
     @Transactional(readOnly = true)
     public List<SubjectDto> readAll() {
         return subjectRepository.findAll().stream()

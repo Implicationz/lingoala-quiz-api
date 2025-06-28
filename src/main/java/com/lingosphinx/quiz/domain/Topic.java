@@ -16,6 +16,6 @@ public class Topic {
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 }
