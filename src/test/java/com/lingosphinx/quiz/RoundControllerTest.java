@@ -1,6 +1,7 @@
 package com.lingosphinx.quiz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lingosphinx.quiz.controller.RoundController;
 import com.lingosphinx.quiz.dto.QuizDto;
 import com.lingosphinx.quiz.dto.RoundDto;
 import com.lingosphinx.quiz.dto.TopicDto;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-@WebMvcTest
+@WebMvcTest(controllers = RoundController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class RoundControllerTest {
 

@@ -1,6 +1,7 @@
 package com.lingosphinx.quiz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lingosphinx.quiz.controller.QuizController;
 import com.lingosphinx.quiz.dto.QuizDto;
 import com.lingosphinx.quiz.dto.TopicDto;
 import com.lingosphinx.quiz.service.QuizService;
@@ -17,7 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
+@WebMvcTest(controllers = QuizController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class QuizControllerTest {
 

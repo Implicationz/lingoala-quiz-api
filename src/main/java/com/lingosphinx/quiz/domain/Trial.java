@@ -26,54 +26,55 @@ public class Trial {
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
-    @Column(name = "last_attempted_at")
-    private Instant lastAttemptedAt;
-
-    @Column(name = "interval_days")
-    private int intervalDays;
-
-    @Column(name = "ease_factor")
-    private double easeFactor;
-
+    @Builder.Default
     @Column(name = "success_count")
-    private int successCount;
+    private int successCount = 0;
 
+    @Builder.Default
     @Column(name = "failure_count")
-    private int failureCount;
+    private int failureCount = 0;
 
+    @Builder.Default
+    @Column(name = "last_attempted_at")
+    private Instant lastAttemptedAt = Instant.EPOCH;
+
+    @Builder.Default
     @Column(name = "next_due_date")
-    private Instant nextDueDate;
+    private Instant nextDueDate = Instant.EPOCH;
+
+    @Transient
+    private SchedulingStrategy schedulingStrategy;
+
+    @Builder.Default
+    @Embedded
+    private SchedulingInformation schedulingInformation = new SchedulingInformation();
 
     @Builder.Default
     @OneToMany(mappedBy = "trial", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attempt> attempts = new ArrayList<>();
 
-    public void recalculateDueDate() {
+    protected void recalculateDueDate() {
         var now = Instant.now();
-        this.nextDueDate = now.plusSeconds((long) intervalDays * 24 * 3600);
-        this.lastAttemptedAt = now;
+        this.setNextDueDate(now.plusSeconds((long) this.schedulingInformation.getIntervalDays() * 24 * 3600));
     }
 
     public void failure() {
         this.failureCount++;
-        this.easeFactor = Math.max(this.easeFactor - 0.2, 1.3);
-        this.intervalDays = 1;
-        recalculateDueDate();
+        this.setLastAttemptedAt(Instant.now());
+        this.schedulingInformation.schedule(this.schedulingStrategy, false);
+        this.recalculateDueDate();
     }
 
     public void success() {
         this.successCount++;
-        this.easeFactor = Math.max(this.easeFactor + 0.1, 1.3);
-        this.intervalDays = Math.max(1, (int) Math.round(this.intervalDays * this.easeFactor));
-        recalculateDueDate();
-    }
-
-    public boolean isNew() {
-        return successCount + failureCount < 1;
+        this.setLastAttemptedAt(Instant.now());
+        this.schedulingInformation.schedule(this.schedulingStrategy, true);
+        this.recalculateDueDate();
     }
 
     public void apply(Attempt attempt) {
         this.attempts.add(attempt);
+        this.schedulingStrategy.schedule(this.schedulingInformation, attempt.getAnswer().isCorrect());
         if(attempt.getAnswer().isCorrect()) {
             success();
         } else {

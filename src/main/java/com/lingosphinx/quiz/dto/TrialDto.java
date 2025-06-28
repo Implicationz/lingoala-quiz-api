@@ -18,12 +18,14 @@ public class TrialDto {
     private String id;
     private String userId;
     private QuestionDto question;
-    private Instant lastAttemptedAt;
-    private int intervalDays;
-    private double easeFactor;
-    private int successCount;
-    private int failureCount;
-    private Instant nextDueDate;
+    @Builder.Default
+    private int successCount = 0;
+    @Builder.Default
+    private int failureCount = 0;
+    @Builder.Default
+    private Instant lastAttemptedAt = Instant.EPOCH;
+    @Builder.Default
+    private Instant nextDueDate = Instant.EPOCH;
     @Builder.Default
     private List<AttemptDto> attempts = new ArrayList<>();
 }
