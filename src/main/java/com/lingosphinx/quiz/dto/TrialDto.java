@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public class TrialDto {
 
-    private String id;
+    private Long id;
     private String userId;
     private QuestionDto question;
     @Builder.Default

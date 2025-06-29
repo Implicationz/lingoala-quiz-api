@@ -29,7 +29,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     @Transactional(readOnly = true)
-    public TopicDto readById(String id) {
+    public TopicDto readById(Long id) {
         var topic = topicRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Topic not found"));
         return topicMapper.toDto(topic);
@@ -44,7 +44,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public TopicDto update(String id, TopicDto topicDto) {
+    public TopicDto update(Long id, TopicDto topicDto) {
         var existingTopic = topicRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Topic not found"));
 
@@ -53,7 +53,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Long id) {
         topicRepository.deleteById(id);
     }
 }

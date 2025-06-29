@@ -26,7 +26,7 @@ public class QuizController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<QuizDto> readById(@PathVariable String id) {
+    public ResponseEntity<QuizDto> readById(@PathVariable Long id) {
         return ResponseEntity.ok(quizService.readById(id));
     }
 
@@ -36,12 +36,12 @@ public class QuizController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<QuizDto> update(@PathVariable String id, @RequestBody @Valid QuizDto quiz) {
+    public ResponseEntity<QuizDto> update(@PathVariable Long id, @RequestBody @Valid QuizDto quiz) {
         return ResponseEntity.ok(quizService.update(id, quiz));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         quizService.delete(id);
         return ResponseEntity.noContent().build();
     }

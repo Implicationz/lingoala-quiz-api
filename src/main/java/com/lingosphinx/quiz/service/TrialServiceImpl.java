@@ -5,6 +5,7 @@ import com.lingosphinx.quiz.mapper.TrialMapper;
 import com.lingosphinx.quiz.repository.TrialRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class TrialServiceImpl implements TrialService {
-
-    private static final Logger logger = LoggerFactory.getLogger(TrialServiceImpl.class);
 
     private final TrialRepository trialRepository;
     private final TrialMapper trialMapper;
@@ -26,16 +26,16 @@ public class TrialServiceImpl implements TrialService {
     public TrialDto create(TrialDto trialDto) {
         var trial = trialMapper.toEntity(trialDto);
         var savedTrial = trialRepository.save(trial);
-        logger.info("Trial created successfully: id={}", savedTrial.getId());
+        log.info("Trial created successfully: id={}", savedTrial.getId());
         return trialMapper.toDto(savedTrial);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public TrialDto readById(String id) {
+    public TrialDto readById(Long id) {
         var trial = trialRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Trial not found"));
-        logger.info("Trial read successfully: id={}", id);
+        log.info("Trial read successfully: id={}", id);
         return trialMapper.toDto(trial);
     }
 
@@ -45,25 +45,25 @@ public class TrialServiceImpl implements TrialService {
         var result = trialRepository.findAll().stream()
                 .map(trialMapper::toDto)
                 .toList();
-        logger.info("All trials read successfully, count={}", result.size());
+        log.info("All trials read successfully, count={}", result.size());
         return result;
     }
 
     @Override
-    public TrialDto update(String id, TrialDto trialDto) {
+    public TrialDto update(Long id, TrialDto trialDto) {
         var existingTrial = trialRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Trial not found"));
 
         trialMapper.updateEntityFromDto(trialDto, existingTrial);
 
         var savedTrial = trialRepository.save(existingTrial);
-        logger.info("Trial updated successfully: id={}", savedTrial.getId());
+        log.info("Trial updated successfully: id={}", savedTrial.getId());
         return trialMapper.toDto(savedTrial);
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Long id) {
         trialRepository.deleteById(id);
-        logger.info("Trial deleted successfully: id={}", id);
+        log.info("Trial deleted successfully: id={}", id);
     }
 }

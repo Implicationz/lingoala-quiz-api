@@ -1,5 +1,6 @@
 package com.lingosphinx.quiz.dto;
 
+import com.lingosphinx.quiz.domain.LanguageCode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,11 +11,11 @@ import lombok.*;
 public class SubjectDto {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private String language;
+    private LanguageCode language;
 }

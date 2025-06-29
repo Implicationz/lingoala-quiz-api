@@ -10,6 +10,7 @@ import com.lingosphinx.quiz.mapper.RoundMapper;
 import com.lingosphinx.quiz.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -21,12 +22,11 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class RoundServiceImpl implements RoundService {
-
-    private static final Logger logger = LoggerFactory.getLogger(RoundServiceImpl.class);
 
     private final TrialRepository trialRepository;
     private final QuestionRepository questionRepository;

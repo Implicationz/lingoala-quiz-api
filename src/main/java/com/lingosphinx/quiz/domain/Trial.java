@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "trial")
+@Table(name = "trial", indexes = {
+    @Index(columnList = "user_id"),
+    @Index(columnList = "next_due_date")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +20,7 @@ import java.util.List;
 public class Trial {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private Long id;
 
     @Column(name = "user_id", nullable = false)
     private String userId;

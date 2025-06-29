@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface QuizRepository extends JpaRepository<Quiz, String> {
+public interface QuizRepository extends JpaRepository<Quiz, Long> {
     @EntityGraph(attributePaths = {"topic", "topic.subject", "questions"})
-    Optional<Quiz> findWithQuestionsById(String id);
+    Optional<Quiz> findWithQuestionsById(Long id);
 
     @EntityGraph(attributePaths = {"topic", "topic.subject"})
     List<Quiz> findAll();

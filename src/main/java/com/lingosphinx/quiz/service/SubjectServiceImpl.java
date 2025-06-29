@@ -31,7 +31,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional(readOnly = true)
-    public SubjectDto readById(String id) {
+    public SubjectDto readById(Long id) {
         var subject = subjectRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Subject not found"));
         return subjectMapper.toDto(subject);
@@ -47,7 +47,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public SubjectDto update(String id, SubjectDto subjectDto) {
+    public SubjectDto update(Long id, SubjectDto subjectDto) {
         var existingSubject = subjectRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Subject not found"));
 
@@ -56,7 +56,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Long id) {
         subjectRepository.deleteById(id);
     }
 }

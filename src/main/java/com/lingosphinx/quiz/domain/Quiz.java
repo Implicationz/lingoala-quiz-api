@@ -7,16 +7,18 @@ import lombok.*;
 import java.util.*;
 
 @Entity
-@Table(name = "quiz")
+@Table(name = "quiz", indexes = {
+    @Index(columnList = "language")
+})
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private Long id;
 
     @Column(nullable = false)
-    private String language;
+    private LanguageCode language;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id", nullable = false)

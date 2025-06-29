@@ -1,5 +1,6 @@
 package com.lingosphinx.quiz.dto;
 
+import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.domain.Quiz;
 import com.lingosphinx.quiz.domain.Trial;
 import lombok.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class RoundDto {
-    private String language;
+    private LanguageCode language;
     private QuizDto quiz;
     private int newCount;
     private int dueCount;

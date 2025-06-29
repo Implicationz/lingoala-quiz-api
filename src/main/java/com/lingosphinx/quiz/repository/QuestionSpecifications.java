@@ -1,6 +1,7 @@
 // src/main/java/com/lingosphinx/quiz/repository/QuestionSpecifications.java
 package com.lingosphinx.quiz.repository;
 
+import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.domain.Question;
 import com.lingosphinx.quiz.domain.Trial;
 import jakarta.persistence.criteria.JoinType;
@@ -20,12 +21,12 @@ public class QuestionSpecifications {
         };
     }
 
-    public static Specification<Question> quizIdEquals(String quizId) {
+    public static Specification<Question> quizIdEquals(Long quizId) {
         return (root, query, cb) -> cb.equal(root.get("quiz").get("id"), quizId);
     }
 
-    public static Specification<Question> quizLanguageEquals(String language) {
-        return (root, query, cb) -> cb.equal(root.get("quiz").get("language"), language);
+    public static Specification<Question> quizLanguageEquals(LanguageCode language) {
+        return (root, query, cb) -> cb.equal(root.get("quiz").get("language"), language.getValue());
     }
 
     public static Specification<Question> withAnswersFetch() {

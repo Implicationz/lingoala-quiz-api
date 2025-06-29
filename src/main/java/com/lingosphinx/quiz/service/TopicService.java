@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface TopicService {
     TopicDto create(TopicDto topic);
-    TopicDto readById(String id);
+    TopicDto readById(Long id);
     List<TopicDto> readAll();
-    TopicDto update(String id, TopicDto topic);
-    void delete(String id);
+    TopicDto update(Long id, TopicDto topic);
+    void delete(Long id);
 }

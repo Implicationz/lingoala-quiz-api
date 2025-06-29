@@ -11,6 +11,7 @@ import com.lingosphinx.quiz.repository.TrialRepository;
 import com.lingosphinx.quiz.repository.TrialSpecifications;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -20,12 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class AttemptServiceImpl implements AttemptService {
-
-    private static final Logger logger = LoggerFactory.getLogger(AttemptServiceImpl.class);
 
     private final TrialRepository trialRepository;
     private final QuestionRepository questionRepository;

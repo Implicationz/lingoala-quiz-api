@@ -7,6 +7,7 @@ import com.lingosphinx.quiz.repository.QuizRepository;
 import com.lingosphinx.quiz.repository.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class QuizServiceImpl implements QuizService {
-
-    private static final Logger logger = LoggerFactory.getLogger(QuizServiceImpl.class);
 
     private final QuizRepository quizRepository;
     private final TopicRepository topicRepository;
@@ -33,16 +33,16 @@ public class QuizServiceImpl implements QuizService {
                 .orElseThrow(() -> new EntityNotFoundException("Topic not found"));
         quiz.setTopic(topic);
         var savedQuiz = quizRepository.save(quiz);
-        logger.info("Quiz created successfully: id={}", savedQuiz.getId());
+        log.info("Quiz created successfully: id={}", savedQuiz.getId());
         return quizMapper.toDto(savedQuiz);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public QuizDto readById(String id) {
+    public QuizDto readById(Long id) {
         var quiz = quizRepository.findWithQuestionsById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Quiz not found"));
-        logger.info("Quiz read successfully: id={}", id);
+        log.info("Quiz read successfully: id={}", id);
         return quizMapper.toDto(quiz);
     }
 
@@ -52,12 +52,12 @@ public class QuizServiceImpl implements QuizService {
         var result = quizRepository.findAll().stream()
                 .map(quizMapper::toDto)
                 .toList();
-        logger.info("All quizzes read successfully, count={}", result.size());
+        log.info("All quizzes read successfully, count={}", result.size());
         return result;
     }
 
     @Override
-    public QuizDto update(String id, QuizDto quizDto) {
+    public QuizDto update(Long id, QuizDto quizDto) {
         var existingQuiz = quizRepository.findWithQuestionsById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Quiz not found"));
         var topic = topicRepository.findById(quizDto.getTopic().getId())
@@ -73,13 +73,13 @@ public class QuizServiceImpl implements QuizService {
         questionService.syncQuestions(existingQuiz, quizMapper.toEntity(quizDto).getQuestions());
 
         var savedQuiz = quizRepository.save(existingQuiz);
-        logger.info("Quiz updated successfully: id={}", savedQuiz.getId());
+        log.info("Quiz updated successfully: id={}", savedQuiz.getId());
         return quizMapper.toDto(savedQuiz);
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Long id) {
         quizRepository.deleteById(id);
-        logger.info("Quiz deleted successfully: id={}", id);
+        log.info("Quiz deleted successfully: id={}", id);
     }
 }

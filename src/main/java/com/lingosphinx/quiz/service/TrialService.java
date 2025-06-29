@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface TrialService {
     TrialDto create(TrialDto trial);
-    TrialDto readById(String id);
+    TrialDto readById(Long id);
     List<TrialDto> readAll();
-    TrialDto update(String id, TrialDto trial);
-    void delete(String id);
+    TrialDto update(Long id, TrialDto trial);
+    void delete(Long id);
 }

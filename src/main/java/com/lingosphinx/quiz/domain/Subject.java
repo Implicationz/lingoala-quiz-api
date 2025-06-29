@@ -11,11 +11,11 @@ import java.util.*;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
-    private String language;
+    private LanguageCode language;
 }

@@ -1,5 +1,6 @@
 package com.lingosphinx.quiz.repository;
 
+import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.domain.Trial;
 import com.lingosphinx.quiz.domain.Quiz;
 import jakarta.persistence.criteria.JoinType;
@@ -16,12 +17,12 @@ public class TrialSpecifications {
         return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("nextDueDate"), date);
     }
 
-    public static Specification<Trial> quizIdEquals(String quizId) {
+    public static Specification<Trial> quizIdEquals(Long quizId) {
         return (root, query, cb) -> cb.equal(root.get("question").get("quiz").get("id"), quizId);
     }
 
-    public static Specification<Trial> quizLanguageEquals(String language) {
-        return (root, query, cb) -> cb.equal(root.get("question").get("quiz").get("language"), language);
+    public static Specification<Trial> quizLanguageEquals(LanguageCode language) {
+        return (root, query, cb) -> cb.equal(root.get("question").get("quiz").get("language"), language.getValue());
     }
 
     public static Specification<Trial> withQuestionAndAnswersFetch() {

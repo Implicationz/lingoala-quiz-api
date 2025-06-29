@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 import java.util.Optional;
 
-public interface TrialRepository extends JpaRepository<Trial, String>, JpaSpecificationExecutor<Trial> {
+public interface TrialRepository extends JpaRepository<Trial, Long>, JpaSpecificationExecutor<Trial> {
 
     @EntityGraph(attributePaths = {"topic", "topic.subject", "question"})
     List<Trial> findAll();

@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface SubjectService {
     SubjectDto create(SubjectDto subject);
-    SubjectDto readById(String id);
+    SubjectDto readById(Long id);
     List<SubjectDto> readAll();
-    SubjectDto update(String id, SubjectDto subject);
-    void delete(String id);
+    SubjectDto update(Long id, SubjectDto subject);
+    void delete(Long id);
 }

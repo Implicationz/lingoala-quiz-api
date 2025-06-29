@@ -24,7 +24,7 @@ public class SubjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubjectDto> readById(@PathVariable String id) {
+    public ResponseEntity<SubjectDto> readById(@PathVariable Long id) {
         return ResponseEntity.ok(subjectService.readById(id));
     }
 
@@ -34,12 +34,12 @@ public class SubjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SubjectDto> update(@PathVariable String id, @RequestBody @Valid SubjectDto subject) {
+    public ResponseEntity<SubjectDto> update(@PathVariable Long id, @RequestBody @Valid SubjectDto subject) {
         return ResponseEntity.ok(subjectService.update(id, subject));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         subjectService.delete(id);
         return ResponseEntity.noContent().build();
     }
