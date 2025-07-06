@@ -57,15 +57,14 @@ class RoundServiceTest {
     void setup() {
         var subject = subjectService.create(SubjectDto.builder()
                 .name("English")
-                .language("english")
+                .language(LanguageCode.ENGLISH)
                 .build());
         var topic = topicService.create(TopicDto.builder()
                 .name("Literature")
                 .subject(subject)
                 .build());
         quiz = quizService.create(QuizDto.builder()
-                .language("english")
-                .topic(topic)
+                .language(LanguageCode.ENGLISH)
                 .name("Test Quiz")
                 .userId("user-1")
                 .source("Custom")
@@ -125,7 +124,7 @@ class RoundServiceTest {
     @Test
     void createLearningRound_byLanguage_shouldReturnRoundWithTrials() {
         var roundDto = RoundDto.builder()
-                .language("english")
+                .language(LanguageCode.ENGLISH)
                 .newCount(10)
                 .dueCount(0)
                 .build();
@@ -169,7 +168,7 @@ class RoundServiceTest {
         this.trial = trialService.create(trial);
 
         var roundDto = RoundDto.builder()
-                .language("english")
+                .language(LanguageCode.ENGLISH)
                 .newCount(0)
                 .dueCount(10)
                 .build();

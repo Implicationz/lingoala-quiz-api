@@ -2,6 +2,7 @@ package com.lingosphinx.quiz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lingosphinx.quiz.controller.RoundController;
+import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.dto.QuizDto;
 import com.lingosphinx.quiz.dto.RoundDto;
 import com.lingosphinx.quiz.dto.TopicDto;
@@ -36,17 +37,15 @@ class RoundControllerTest {
     @Test
     void createLearningRoundByQuiz_shouldReturnCreatedRound() throws Exception {
         QuizDto quiz = QuizDto.builder()
-                .id("1")
                 .name("Test Quiz")
-                .language("english")
-                .topic(TopicDto.builder().id("t1").name("Topic").build())
+                .language(LanguageCode.ENGLISH)
                 .userId("user-1")
                 .source("Custom")
                 .build();
 
         RoundDto roundDto = RoundDto.builder()
                 .quiz(quiz)
-                .language("english")
+                .language(LanguageCode.ENGLISH)
                 .newCount(10)
                 .dueCount(0)
                 .build();
@@ -63,7 +62,7 @@ class RoundControllerTest {
     @Test
     void createLearningRoundByLanguage_shouldReturnCreatedRound() throws Exception {
         RoundDto roundDto = RoundDto.builder()
-                .language("english")
+                .language(LanguageCode.ENGLISH)
                 .newCount(10)
                 .dueCount(0)
                 .build();
@@ -80,17 +79,15 @@ class RoundControllerTest {
     @Test
     void createPracticeRoundByQuiz_shouldReturnCreatedRound() throws Exception {
         QuizDto quiz = QuizDto.builder()
-                .id("1")
                 .name("Test Quiz")
-                .language("english")
-                .topic(TopicDto.builder().id("t1").name("Topic").build())
+                .language(LanguageCode.ENGLISH)
                 .userId("user-1")
                 .source("Custom")
                 .build();
 
         RoundDto roundDto = RoundDto.builder()
                 .quiz(quiz)
-                .language("english")
+                .language(LanguageCode.ENGLISH)
                 .newCount(0)
                 .dueCount(10)
                 .build();
@@ -107,7 +104,7 @@ class RoundControllerTest {
     @Test
     void createPracticeRoundByLanguage_shouldReturnCreatedRound() throws Exception {
         RoundDto roundDto = RoundDto.builder()
-                .language("english")
+                .language(LanguageCode.ENGLISH)
                 .newCount(0)
                 .dueCount(10)
                 .build();

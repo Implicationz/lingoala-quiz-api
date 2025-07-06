@@ -10,7 +10,7 @@ import java.util.*;
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class Subject {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false, unique = true)

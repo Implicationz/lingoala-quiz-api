@@ -7,9 +7,10 @@ import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.Instant;
+import java.util.UUID;
 
 public class TrialSpecifications {
-    public static Specification<Trial> userIdEquals(String userId) {
+    public static Specification<Trial> userIdEquals(UUID userId) {
         return (root, query, cb) -> cb.equal(root.get("userId"), userId);
     }
 
@@ -28,7 +29,7 @@ public class TrialSpecifications {
     public static Specification<Trial> withQuestionAndAnswersFetch() {
         return (root, query, cb) -> {
             if (Trial.class.equals(query.getResultType())) {
-                root.fetch("question", JoinType.LEFT).fetch("answers", JoinType.LEFT);
+                root.fetch("question", JoinType.INNER);
             }
             return cb.conjunction();
         };

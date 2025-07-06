@@ -20,7 +20,7 @@ public class RoundController {
     private final RoundService roundService;
 
 
-    @PostMapping("/practice/language")
+    @PostMapping()
     public ResponseEntity<RoundDto> create(@RequestBody RoundDto round) {
         return ResponseEntity.status(HttpStatus.CREATED).body(roundService.create(round));
     }

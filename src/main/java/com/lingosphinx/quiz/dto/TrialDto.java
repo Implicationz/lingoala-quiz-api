@@ -7,6 +7,7 @@ import lombok.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ import java.util.List;
 public class TrialDto {
 
     private Long id;
-    private String userId;
+    private UUID userId;
     private QuestionDto question;
     @Builder.Default
     private int successCount = 0;

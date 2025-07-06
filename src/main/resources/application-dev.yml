@@ -1,3 +1,9 @@
+logging:
+  level:
+    com.fasterxml.jackson: DEBUG
+    com.fasterxml.jackson.databind: DEBUG
+server:
+  port: 8081
 spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:myapp}
@@ -6,5 +12,18 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      format_sql: true
       ddl-auto: update
+    properties:
+      hibernate:
+        generate_statistics: true
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+cors:
+  allowed-origins:
+    - http://localhost:5173
+    - capacitor://localhost
+    - http://localhost
+jwt:
+  secret: ${JWT_SECRET}

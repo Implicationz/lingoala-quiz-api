@@ -25,7 +25,9 @@ public interface QuizMapper {
     Answer toEntity(AnswerDto answerDto);
 
     @AfterMapping
-    default void linkQuestions(@MappingTarget Quiz quiz) {
+    default void linkQuestions(QuizDto dto, @MappingTarget Quiz quiz) {
         quiz.linkQuestions();
     }
+
+    void updateEntityFromDto(QuizDto quizDto, @MappingTarget Quiz existingQuiz);
 }

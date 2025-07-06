@@ -29,9 +29,6 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public QuizDto create(QuizDto quizDto) {
         var quiz = quizMapper.toEntity(quizDto);
-        var topic = topicRepository.findById(quizDto.getTopic().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Topic not found"));
-        quiz.setTopic(topic);
         var savedQuiz = quizRepository.save(quiz);
         log.info("Quiz created successfully: id={}", savedQuiz.getId());
         return quizMapper.toDto(savedQuiz);
@@ -60,17 +57,8 @@ public class QuizServiceImpl implements QuizService {
     public QuizDto update(Long id, QuizDto quizDto) {
         var existingQuiz = quizRepository.findWithQuestionsById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Quiz not found"));
-        var topic = topicRepository.findById(quizDto.getTopic().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Topic not found"));
 
-        existingQuiz.setLanguage(quizDto.getLanguage());
-        existingQuiz.setTopic(topic);
-        existingQuiz.setName(quizDto.getName());
-        existingQuiz.setUserId(quizDto.getUserId());
-        existingQuiz.setSource(quizDto.getSource());
-        existingQuiz.setImage(quizDto.getImage());
-
-        questionService.syncQuestions(existingQuiz, quizMapper.toEntity(quizDto).getQuestions());
+        this.quizMapper.updateEntityFromDto(quizDto, existingQuiz);
 
         var savedQuiz = quizRepository.save(existingQuiz);
         log.info("Quiz updated successfully: id={}", savedQuiz.getId());

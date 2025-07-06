@@ -7,8 +7,10 @@ import com.lingosphinx.quiz.domain.Trial;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.UUID;
+
 public class QuestionSpecifications {
-    public static Specification<Question> noTrialForUser(String userId) {
+    public static Specification<Question> noTrialForUser(UUID userId) {
         return (root, query, cb) -> {
             var subquery = query.subquery(Long.class);
             var trialRoot = subquery.from(Trial.class);

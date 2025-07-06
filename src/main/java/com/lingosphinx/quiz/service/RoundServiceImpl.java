@@ -30,18 +30,18 @@ public class RoundServiceImpl implements RoundService {
 
     private final TrialRepository trialRepository;
     private final QuestionRepository questionRepository;
+    private final UserService userService;
     private final RoundMapper roundMapper;
 
     protected Stream<Trial> newTrials(Round round) {
         if(round.getNewCount() <= 0) {
             return Stream.empty();
         }
-        var currentUserId = getCurrentUserId();
+        var currentUserId = this.userService.getCurrentUserId();
         var quiz = round.getQuiz();
         var language = round.getLanguage();
 
         var spec = QuestionSpecifications.noTrialForUser(currentUserId)
-                .and(QuestionSpecifications.withAnswersFetch())
                 .and(QuestionSpecifications.randomOrder());
 
         if (language != null) {
@@ -63,14 +63,13 @@ public class RoundServiceImpl implements RoundService {
         if(round.getDueCount() <= 0) {
             return Stream.empty();
         }
-        var currentUserId = getCurrentUserId();
+        var currentUserId = this.userService.getCurrentUserId();
         var quiz = round.getQuiz();
         var language = round.getLanguage();
         var today = Instant.now();
 
         var spec = TrialSpecifications.userIdEquals(currentUserId)
                 .and(TrialSpecifications.nextDueDateBeforeOrEqual(today))
-                .and(TrialSpecifications.withQuestionAndAnswersFetch())
                 .and(TrialSpecifications.randomOrder());
 
         if (language != null) {
@@ -99,10 +98,5 @@ public class RoundServiceImpl implements RoundService {
                 .build();
 
         return roundMapper.toDto(entity);
-    }
-
-
-    private String getCurrentUserId() {
-        return "currentUserId";
     }
 }

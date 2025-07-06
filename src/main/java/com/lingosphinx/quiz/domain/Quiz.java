@@ -3,9 +3,11 @@ package com.lingosphinx.quiz.domain;
 import com.lingosphinx.quiz.domain.Topic;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.*;
 
+@BatchSize(size = 20)
 @Entity
 @Table(name = "quiz", indexes = {
     @Index(columnList = "language")
@@ -14,15 +16,11 @@ import java.util.*;
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class Quiz {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false)
     private LanguageCode language;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "topic_id", nullable = false)
-    private Topic topic;
 
     @Column
     private String name;

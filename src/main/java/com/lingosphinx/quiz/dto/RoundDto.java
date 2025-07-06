@@ -19,7 +19,8 @@ public class RoundDto {
     private QuizDto quiz;
     private int newCount;
     private int dueCount;
+    @Builder.Default
     private int limitCount = Integer.MAX_VALUE;
     @Builder.Default
-    private List<Trial> trials = new ArrayList<>();
+    private List<TrialDto> trials = new ArrayList<>();
 }

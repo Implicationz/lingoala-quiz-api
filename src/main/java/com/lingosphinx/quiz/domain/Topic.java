@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class Topic {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

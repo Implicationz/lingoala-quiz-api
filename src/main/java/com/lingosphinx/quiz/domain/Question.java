@@ -3,17 +3,19 @@ package com.lingosphinx.quiz.domain;
 import com.lingosphinx.quiz.domain.Explanation;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@BatchSize(size = 30)
 @Entity
 @Table(name = "question")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class Question {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,6 +40,7 @@ public class Question {
     private Explanation explanation;
 
     @Builder.Default
+    @BatchSize(size = 80)
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Answer> answers = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package com.lingosphinx.quiz;
 
+import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.dto.*;
 import com.lingosphinx.quiz.service.QuizService;
 import com.lingosphinx.quiz.service.SubjectService;
@@ -45,24 +46,23 @@ class QuizServiceTest {
     @Autowired
     private TopicService topicService;
 
-    private SubjectDto createSubject() {
+    private SubjectDto createSubject(String name) {
         return subjectService.create(SubjectDto.builder()
-                .name("English")
-                .language("english")
+                .name(name)
+                .language(LanguageCode.ENGLISH)
                 .build());
     }
 
     private TopicDto createTopic(SubjectDto subject) {
         return topicService.create(TopicDto.builder()
-                .name("Literature")
+                .name(subject.getName())
                 .subject(subject)
                 .build());
     }
 
     private QuizDto baseQuiz(String name, String userId, TopicDto topic) {
         return QuizDto.builder()
-                .language("english")
-                .topic(topic)
+                .language(LanguageCode.ENGLISH)
                 .name(name)
                 .userId(userId)
                 .source("Custom")
@@ -100,7 +100,7 @@ class QuizServiceTest {
     }
 
     private QuizDto createQuiz(String name, String userId) {
-        var subject = createSubject();
+        var subject = createSubject(name);
         var topic = createTopic(subject);
         var quiz = baseQuiz(name, userId, topic);
         return quizService.create(quiz);
@@ -108,7 +108,7 @@ class QuizServiceTest {
 
     @Test
     void createQuiz_shouldPersistQuiz() {
-        var subject = createSubject();
+        var subject = createSubject("My Subject");
         var topic = createTopic(subject);
         var quiz = baseQuiz("My Quiz", "user-123", topic);
         var question = createSampleQuestion(quiz);
@@ -133,8 +133,6 @@ class QuizServiceTest {
         var found = quizService.readById(quiz.getId());
         assertNotNull(found);
         assertEquals("Test Quiz", found.getName());
-        assertNotNull(found.getTopic());
-        assertNotNull(found.getTopic().getId());
     }
 
     @Test
@@ -146,10 +144,6 @@ class QuizServiceTest {
         assertTrue(all.size() >= 2);
         assertTrue(all.stream().anyMatch(q -> "Quiz 1".equals(q.getName())));
         assertTrue(all.stream().anyMatch(q -> "Quiz 2".equals(q.getName())));
-        all.forEach(q -> {
-            assertNotNull(q.getTopic());
-            assertNotNull(q.getTopic().getId());
-        });
     }
 
     @Test

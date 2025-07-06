@@ -2,6 +2,7 @@ package com.lingosphinx.quiz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lingosphinx.quiz.controller.QuizController;
+import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.dto.QuizDto;
 import com.lingosphinx.quiz.dto.TopicDto;
 import com.lingosphinx.quiz.service.QuizService;
@@ -34,10 +35,8 @@ class QuizControllerTest {
     @Test
     void createQuiz_shouldReturnCreatedQuiz() throws Exception {
         QuizDto quiz = QuizDto.builder()
-                .id("1")
                 .name("Test Quiz")
-                .language("english")
-                .topic(TopicDto.builder().id("t1").name("Topic").build())
+                .language(LanguageCode.ENGLISH)
                 .userId("user-1")
                 .source("Custom")
                 .build();
@@ -54,15 +53,13 @@ class QuizControllerTest {
     @Test
     void readById_shouldReturnQuiz() throws Exception {
         QuizDto quiz = QuizDto.builder()
-                .id("1")
                 .name("Test Quiz")
-                .language("english")
-                .topic(TopicDto.builder().id("t1").name("Topic").build())
+                .language(LanguageCode.ENGLISH)
                 .userId("user-1")
                 .source("Custom")
                 .build();
 
-        Mockito.when(quizService.readById("1")).thenReturn(quiz);
+        Mockito.when(quizService.readById(1L)).thenReturn(quiz);
 
         mockMvc.perform(get("/quiz/1"))
                 .andExpect(status().isOk())

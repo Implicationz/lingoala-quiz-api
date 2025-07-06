@@ -12,7 +12,6 @@ import java.util.List;
 public class QuizDto {
     private Long id;
     private LanguageCode language;
-    private TopicDto topic;
     private String name;
     private String userId;
 

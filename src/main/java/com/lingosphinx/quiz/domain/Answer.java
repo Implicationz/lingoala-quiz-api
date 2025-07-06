@@ -2,6 +2,7 @@ package com.lingosphinx.quiz.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(name = "answer")
@@ -9,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class Answer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -19,6 +20,12 @@ public class Answer {
     @Column(nullable = false, length = 1024)
     private String text;
 
+    @Column(length = 1024)
+    private String translation;
+
+    @Column(length = 1024)
+    private String transcription;
+
     @Column(nullable = false)
-    private boolean isCorrect;
+    private boolean correct;
 }

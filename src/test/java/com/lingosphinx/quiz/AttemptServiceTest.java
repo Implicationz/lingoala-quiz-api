@@ -1,6 +1,7 @@
 // Datei: src/test/java/com/lingosphinx/quiz/AttemptServiceTest.java
 package com.lingosphinx.quiz;
 
+import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.dto.*;
 import com.lingosphinx.quiz.service.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,14 +57,14 @@ class AttemptServiceTest {
     void setup() {
         var subject = subjectService.create(SubjectDto.builder()
                 .name("English")
-                .language("english")
+                .language(LanguageCode.ENGLISH)
                 .build());
         var topic = topicService.create(TopicDto.builder()
                 .name("Literature")
                 .subject(subject)
                 .build());
         var quiz = quizService.create(QuizDto.builder()
-                .language("english")
+                .language(LanguageCode.ENGLISH)
                 .topic(topic)
                 .name("Test Quiz")
                 .userId("user-1")

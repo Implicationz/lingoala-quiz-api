@@ -16,6 +16,7 @@ public class Round {
     private Quiz quiz;
     private int newCount;
     private int dueCount;
+    @Builder.Default
     private int limitCount = Integer.MAX_VALUE;
     @Builder.Default
     private List<Trial> trials = new ArrayList<>();

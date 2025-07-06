@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
-    @EntityGraph(attributePaths = {"topic", "topic.subject", "questions"})
+    @EntityGraph(attributePaths = {"questions"})
     Optional<Quiz> findWithQuestionsById(Long id);
 
-    @EntityGraph(attributePaths = {"topic", "topic.subject"})
     List<Quiz> findAll();
 }
