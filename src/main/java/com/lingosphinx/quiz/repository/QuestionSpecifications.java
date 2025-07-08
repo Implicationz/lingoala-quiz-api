@@ -7,6 +7,7 @@ import com.lingosphinx.quiz.domain.Trial;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class QuestionSpecifications {
@@ -31,13 +32,8 @@ public class QuestionSpecifications {
         return (root, query, cb) -> cb.equal(root.get("quiz").get("language"), language.getValue());
     }
 
-    public static Specification<Question> withAnswersFetch() {
-        return (root, query, cb) -> {
-            if (!Long.class.equals(query.getResultType()) && !long.class.equals(query.getResultType())) {
-                root.fetch("answers", JoinType.LEFT);
-            }
-            return cb.conjunction();
-        };
+    public static Specification<Question> isNew(UUID userId, LanguageCode language) {
+        return noTrialForUser(userId).and(quizLanguageEquals(language));
     }
 
     public static Specification<Question> randomOrder() {

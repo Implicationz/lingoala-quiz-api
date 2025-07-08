@@ -15,6 +15,9 @@ import java.util.Optional;
 
 public interface TrialRepository extends JpaRepository<Trial, Long>, JpaSpecificationExecutor<Trial> {
 
+    @EntityGraph(attributePaths = {"question, question.quiz, attempts"})
+    Optional<Trial> findById(Long id);
+
     @EntityGraph(attributePaths = {"topic", "topic.subject", "question"})
     List<Trial> findAll();
 

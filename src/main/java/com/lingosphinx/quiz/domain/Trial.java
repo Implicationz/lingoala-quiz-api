@@ -27,9 +27,10 @@ public class Trial {
     @Column(name = "user_id", nullable = false)
     private UUID userId;
 
+    @Builder.Default
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
-    private Question question;
+    private Question question = Question.builder().build();
 
     @Builder.Default
     @Column(name = "success_count")

@@ -41,12 +41,9 @@ public class RoundServiceImpl implements RoundService {
         var quiz = round.getQuiz();
         var language = round.getLanguage();
 
-        var spec = QuestionSpecifications.noTrialForUser(currentUserId)
+        var spec = QuestionSpecifications.isNew(currentUserId, language)
                 .and(QuestionSpecifications.randomOrder());
 
-        if (language != null) {
-            spec = spec.and(QuestionSpecifications.quizLanguageEquals(language));
-        }
         if (quiz != null) {
             spec = spec.and(QuestionSpecifications.quizIdEquals(quiz.getId()));
         }
@@ -66,15 +63,10 @@ public class RoundServiceImpl implements RoundService {
         var currentUserId = this.userService.getCurrentUserId();
         var quiz = round.getQuiz();
         var language = round.getLanguage();
-        var today = Instant.now();
 
-        var spec = TrialSpecifications.userIdEquals(currentUserId)
-                .and(TrialSpecifications.nextDueDateBeforeOrEqual(today))
+        var spec = TrialSpecifications.isDue(currentUserId, language)
                 .and(TrialSpecifications.randomOrder());
 
-        if (language != null) {
-            spec = spec.and(TrialSpecifications.quizLanguageEquals(language));
-        }
         if (quiz != null) {
             spec = spec.and(TrialSpecifications.quizIdEquals(quiz.getId()));
         }

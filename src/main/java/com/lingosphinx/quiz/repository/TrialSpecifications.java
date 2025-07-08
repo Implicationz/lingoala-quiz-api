@@ -26,13 +26,9 @@ public class TrialSpecifications {
         return (root, query, cb) -> cb.equal(root.get("question").get("quiz").get("language"), language.getValue());
     }
 
-    public static Specification<Trial> withQuestionAndAnswersFetch() {
-        return (root, query, cb) -> {
-            if (Trial.class.equals(query.getResultType())) {
-                root.fetch("question", JoinType.INNER);
-            }
-            return cb.conjunction();
-        };
+    public static Specification<Trial> isDue(UUID userId, LanguageCode language) {
+        var today = Instant.now();
+        return userIdEquals(userId).and(quizLanguageEquals(language)).and(nextDueDateBeforeOrEqual(today));
     }
 
     public static Specification<Trial> randomOrder() {

@@ -20,7 +20,7 @@ public class AttemptController {
     private final AttemptService attemptService;
 
 
-    @PostMapping("/practice/language")
+    @PostMapping()
     public ResponseEntity<AttemptDto> create(@RequestBody AttemptDto attempt) {
         return ResponseEntity.status(HttpStatus.CREATED).body(attemptService.create(attempt));
     }
