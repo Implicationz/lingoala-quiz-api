@@ -17,6 +17,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -65,7 +66,6 @@ class AttemptServiceTest {
                 .build());
         var quiz = quizService.create(QuizDto.builder()
                 .language(LanguageCode.ENGLISH)
-                .topic(topic)
                 .name("Test Quiz")
                 .userId("user-1")
                 .source("Custom")
@@ -81,17 +81,18 @@ class AttemptServiceTest {
                         .transcription("ˈlʌndən")
                         .build())
                 .answers(List.of(
-                        AnswerDto.builder().text("London").isCorrect(true).build(),
-                        AnswerDto.builder().text("Paris").isCorrect(false).build()
+                        AnswerDto.builder().text("London").correct(true).build(),
+                        AnswerDto.builder().text("Paris").correct(false).build()
                 ))
                 .build();
 
         quiz.setQuestions(List.of(question));
         quiz = quizService.create(quiz);
 
+
         trial = trialService.create(TrialDto.builder()
                 .question(quiz.getQuestions().get(0))
-                .userId("test-user")
+                .userId(UUID.randomUUID())
                 .nextDueDate(Instant.now())
                 .build());
 

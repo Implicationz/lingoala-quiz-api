@@ -85,13 +85,13 @@ class QuizServiceTest {
 
         var answer1 = AnswerDto.builder()
                 .text("London")
-                .isCorrect(true)
+                .correct(true)
                 .question(question)
                 .build();
 
         var answer2 = AnswerDto.builder()
                 .text("Paris")
-                .isCorrect(false)
+                .correct(false)
                 .question(question)
                 .build();
 

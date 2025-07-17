@@ -17,6 +17,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,6 +51,10 @@ class RoundServiceTest {
     @Autowired
     private TopicService topicService;
 
+    @Autowired
+    private UserService userService;
+
+
     private QuizDto quiz;
     private TrialDto trial;
 
@@ -80,8 +85,8 @@ class RoundServiceTest {
                         .transcription("ˈlʌndən")
                         .build())
                 .answers(List.of(
-                        AnswerDto.builder().text("London").isCorrect(true).build(),
-                        AnswerDto.builder().text("Paris").isCorrect(false).build()
+                        AnswerDto.builder().text("London").correct(true).build(),
+                        AnswerDto.builder().text("Paris").correct(false).build()
                 ))
                 .build();
 
@@ -96,12 +101,6 @@ class RoundServiceTest {
         }
         if (quiz != null) {
             quizService.delete(quiz.getId());
-        }
-        if (quiz != null && quiz.getTopic() != null) {
-            topicService.delete(quiz.getTopic().getId());
-        }
-        if (quiz != null && quiz.getTopic() != null && quiz.getTopic().getSubject() != null) {
-            subjectService.delete(quiz.getTopic().getSubject().getId());
         }
     }
 
@@ -139,7 +138,7 @@ class RoundServiceTest {
     void createPracticeRound_byQuiz_shouldReturnRoundWithTrials() {
         var trial = TrialDto.builder()
                 .question(quiz.getQuestions().get(0))
-                .userId("currentUserId")
+                .userId(userService.getCurrentUserId())
                 .nextDueDate(Instant.now())
                 .build();
         this.trial = trialService.create(trial);
@@ -162,7 +161,7 @@ class RoundServiceTest {
     void createPracticeRound_byLanguage_shouldReturnRoundWithTrials() {
         var trial = TrialDto.builder()
                 .question(quiz.getQuestions().get(0))
-                .userId("currentUserId")
+                .userId(userService.getCurrentUserId())
                 .nextDueDate(Instant.now())
                 .build();
         this.trial = trialService.create(trial);
