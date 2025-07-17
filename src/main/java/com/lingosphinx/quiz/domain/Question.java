@@ -10,7 +10,6 @@ import java.util.List;
 
 @BatchSize(size = 30)
 @Entity
-@Table(name = "question")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class Question {
