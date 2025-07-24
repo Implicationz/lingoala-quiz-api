@@ -30,9 +30,9 @@ public class Question {
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "text", column = @Column(name = "explanation_text")),
-        @AttributeOverride(name = "translation", column = @Column(name = "explanation_translation")),
-        @AttributeOverride(name = "transcription", column = @Column(name = "explanation_transcription"))
+        @AttributeOverride(name = "text", column = @Column(name = "explanation_text", columnDefinition = "TEXT")),
+        @AttributeOverride(name = "translation", column = @Column(name = "explanation_translation", columnDefinition = "TEXT")),
+        @AttributeOverride(name = "transcription", column = @Column(name = "explanation_transcription", columnDefinition = "TEXT"))
     })
     private Explanation explanation;
 
