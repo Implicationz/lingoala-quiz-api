@@ -22,7 +22,6 @@ public class Quiz {
     @Column(nullable = false)
     private LanguageCode language;
 
-    @Column
     private String name;
 
     @Column(name = "user_id")
@@ -36,10 +35,7 @@ public class Quiz {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<QuizTag> tags = new HashSet<>();
 
-    @Column
     private String source;
-
-    @Column
     private String image;
 
     public void linkQuestions() {

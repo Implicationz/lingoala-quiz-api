@@ -17,13 +17,9 @@ public class Answer {
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
-    @Column(nullable = false, length = 1024)
+    @Column(nullable = false)
     private String text;
-
-    @Column(length = 1024)
     private String translation;
-
-    @Column(length = 1024)
     private String transcription;
 
     @Column(nullable = false)

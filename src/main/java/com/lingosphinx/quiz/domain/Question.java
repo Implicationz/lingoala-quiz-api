@@ -21,13 +21,9 @@ public class Question {
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
-    @Column(nullable = false, length = 2048)
+    @Column(nullable = false)
     private String text;
-
-    @Column(length = 2048)
     private String translation;
-
-    @Column(length = 2048)
     private String transcription;
 
     @Embedded
