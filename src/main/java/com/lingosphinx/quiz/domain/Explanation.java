@@ -8,7 +8,10 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class Explanation {
+    @Column(columnDefinition = "TEXT")
     private String text;
+    @Column(columnDefinition = "TEXT")
     private String translation;
+    @Column(columnDefinition = "TEXT")
     private String transcription;
 }
