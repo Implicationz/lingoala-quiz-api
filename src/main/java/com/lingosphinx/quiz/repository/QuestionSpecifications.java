@@ -31,9 +31,14 @@ public class QuestionSpecifications {
     public static Specification<Question> quizLanguageEquals(LanguageCode language) {
         return (root, query, cb) -> cb.equal(root.get("quiz").get("language"), language.getValue());
     }
-
     public static Specification<Question> isNew(UUID userId, LanguageCode language) {
-        return noTrialForUser(userId).and(quizLanguageEquals(language));
+        var spec = noTrialForUser(userId).and(quizLanguageEquals(language));
+        return spec;
+    }
+
+    public static Specification<Question> isNew(UUID userId, Long quizId) {
+        var spec = noTrialForUser(userId).and(quizIdEquals(quizId));
+        return spec;
     }
 
     public static Specification<Question> randomOrder() {

@@ -28,9 +28,15 @@ public class TrialSpecifications {
 
     public static Specification<Trial> isDue(UUID userId, LanguageCode language) {
         var today = Instant.now();
-        return userIdEquals(userId).and(quizLanguageEquals(language)).and(nextDueDateBeforeOrEqual(today));
+        var spec = userIdEquals(userId).and(nextDueDateBeforeOrEqual(today)).and(quizLanguageEquals(language));
+        return spec;
     }
 
+    public static Specification<Trial> isDue(UUID userId, Long quizId) {
+        var today = Instant.now();
+        var spec = userIdEquals(userId).and(nextDueDateBeforeOrEqual(today)).and(quizIdEquals(quizId));
+        return spec;
+    }
     public static Specification<Trial> randomOrder() {
         return (root, query, cb) -> {
             query.orderBy(cb.asc(cb.function("RANDOM", Double.class)));

@@ -39,14 +39,11 @@ public class RoundServiceImpl implements RoundService {
         }
         var currentUserId = this.userService.getCurrentUserId();
         var quiz = round.getQuiz();
-        var language = round.getLanguage();
 
-        var spec = QuestionSpecifications.isNew(currentUserId, language)
-                .and(QuestionSpecifications.randomOrder());
-
-        if (quiz != null) {
-            spec = spec.and(QuestionSpecifications.quizIdEquals(quiz.getId()));
-        }
+        var spec = round.getQuiz() != null
+                ? QuestionSpecifications.isNew(currentUserId, quiz.getId())
+                : QuestionSpecifications.isNew(currentUserId, round.getLanguage());
+        spec = spec.and(QuestionSpecifications.randomOrder());
 
         var questions = questionRepository.findAll(spec, PageRequest.of(0, round.getNewCount()));
         var trials = questions.stream().map(q -> Trial.builder()
@@ -62,14 +59,11 @@ public class RoundServiceImpl implements RoundService {
         }
         var currentUserId = this.userService.getCurrentUserId();
         var quiz = round.getQuiz();
-        var language = round.getLanguage();
 
-        var spec = TrialSpecifications.isDue(currentUserId, language)
-                .and(TrialSpecifications.randomOrder());
-
-        if (quiz != null) {
-            spec = spec.and(TrialSpecifications.quizIdEquals(quiz.getId()));
-        }
+        var spec = quiz != null
+                ? TrialSpecifications.isDue(currentUserId, quiz.getId())
+                : TrialSpecifications.isDue(currentUserId, round.getLanguage());
+        spec = spec.and(TrialSpecifications.randomOrder());
 
         var trials = trialRepository.findAll(spec, PageRequest.of(0, round.getDueCount())).stream();
         return trials;
