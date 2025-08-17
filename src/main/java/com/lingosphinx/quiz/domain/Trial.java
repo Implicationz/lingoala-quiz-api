@@ -55,6 +55,7 @@ public class Trial {
     @Embedded
     private SchedulingInformation schedulingInformation = new SchedulingInformation();
 
+    @BatchSize(size = 20)
     @Builder.Default
     @OneToMany(mappedBy = "trial", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attempt> attempts = new ArrayList<>();
@@ -79,7 +80,6 @@ public class Trial {
     }
 
     public void apply(Attempt attempt) {
-        this.attempts.add(attempt);
         this.schedulingStrategy.schedule(this.schedulingInformation, attempt.getAnswer().isCorrect());
         if(attempt.getAnswer().isCorrect()) {
             success();

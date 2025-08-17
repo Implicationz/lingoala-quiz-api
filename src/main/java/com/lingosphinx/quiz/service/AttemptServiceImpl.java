@@ -6,10 +6,7 @@ import com.lingosphinx.quiz.domain.Trial;
 import com.lingosphinx.quiz.dto.AttemptDto;
 import com.lingosphinx.quiz.mapper.AttemptMapper;
 import com.lingosphinx.quiz.mapper.TrialMapper;
-import com.lingosphinx.quiz.repository.QuestionRepository;
-import com.lingosphinx.quiz.repository.QuestionSpecifications;
-import com.lingosphinx.quiz.repository.TrialRepository;
-import com.lingosphinx.quiz.repository.TrialSpecifications;
+import com.lingosphinx.quiz.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,23 +26,28 @@ import java.util.stream.Stream;
 public class AttemptServiceImpl implements AttemptService {
 
     private final TrialRepository trialRepository;
+    private final AttemptRepository attemptRepository;
     private final AttemptMapper attemptMapper;
     private final SchedulingStrategy schedulingStrategy;
 
     @Override
     public AttemptDto create(AttemptDto dto) {
         var attempt = attemptMapper.toEntity(dto);
-        var id = attempt.getTrial().getId();
+        var trial = attempt.getTrial();
+
+        var id = trial.getId();
         var exists = id != null && id > 0;
         if(exists) {
-            var found = trialRepository.findById(id)
+            trial = trialRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Trial not found"));
-            attempt.setTrial(found);
         }
-        var trial = attempt.getTrial();
+
         trial.setSchedulingStrategy(schedulingStrategy);
         trial.apply(attempt);
         trialRepository.save(trial);
+
+        attempt.setTrial(trial);
+        attemptRepository.save(attempt);
         return attemptMapper.toDto(attempt);
     }
 }
