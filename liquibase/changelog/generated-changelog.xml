@@ -27,4 +27,93 @@
     <changeSet author="Lutz (generated)" id="1753392080256-3">
         <modifyDataType columnName="explanation_translation" newDataType="clob" tableName="question"/>
     </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-8">
+        <dropForeignKeyConstraint baseTableName="new_filter_item" constraintName="fk5kghnuvmc6v1sk6d9b1861tsp"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-9">
+        <dropForeignKeyConstraint baseTableName="due_filter_item" constraintName="fk7hkylfjw40a2mlewn62823483"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-10">
+        <dropForeignKeyConstraint baseTableName="due_filter_item" constraintName="fkjmn8npbr25bn37hdy66f7l21c"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-11">
+        <dropForeignKeyConstraint baseTableName="new_filter_item" constraintName="fkky9w616smjhotpfh7pawv5xs1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-1">
+        <createTable tableName="study_list_item">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="study_list_item_pkey"/>
+            </column>
+            <column name="quiz_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="study_list_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="due_questions" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="new_questions" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-2">
+        <createTable tableName="study_list">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="study_list_pkey"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="language" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-3">
+        <addUniqueConstraint columnNames="user_id, language" constraintName="study_list_user_id_language_key" tableName="study_list"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-4">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="study_list_item_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-5">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="study_list_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-6">
+        <addForeignKeyConstraint baseColumnNames="study_list_id" baseTableName="study_list_item" constraintName="fkacoeuncmfbix6e7aa931rovuf" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="study_list" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-7">
+        <addForeignKeyConstraint baseColumnNames="quiz_id" baseTableName="study_list_item" constraintName="fkoqmj8wv1vkoyt7gr7563gn35w" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="quiz" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-12">
+        <dropUniqueConstraint constraintName="uk5069rpqc4l3flpqirrg37m8kq" tableName="due_filter"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-13">
+        <dropUniqueConstraint constraintName="uk9n76h4iymmeibkeiw0lht0ahg" tableName="new_filter"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-14">
+        <dropTable tableName="due_filter"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-15">
+        <dropTable tableName="due_filter_item"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-16">
+        <dropTable tableName="new_filter"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-17">
+        <dropTable tableName="new_filter_item"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-18">
+        <dropSequence sequenceName="due_filter_item_seq"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-19">
+        <dropSequence sequenceName="due_filter_seq"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-20">
+        <dropSequence sequenceName="new_filter_item_seq"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756306360866-21">
+        <dropSequence sequenceName="new_filter_seq"/>
+    </changeSet>
 </databaseChangeLog>
