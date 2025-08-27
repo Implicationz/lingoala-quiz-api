@@ -1,12 +1,9 @@
 package com.lingosphinx.quiz.dto;
 
 import com.lingosphinx.quiz.domain.LanguageCode;
-import com.lingosphinx.quiz.domain.Quiz;
-import com.lingosphinx.quiz.domain.Trial;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Getter

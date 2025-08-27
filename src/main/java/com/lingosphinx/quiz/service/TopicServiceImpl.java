@@ -1,6 +1,5 @@
 package com.lingosphinx.quiz.service;
 
-import com.lingosphinx.quiz.domain.Topic;
 import com.lingosphinx.quiz.dto.TopicDto;
 import com.lingosphinx.quiz.mapper.TopicMapper;
 import com.lingosphinx.quiz.repository.TopicRepository;

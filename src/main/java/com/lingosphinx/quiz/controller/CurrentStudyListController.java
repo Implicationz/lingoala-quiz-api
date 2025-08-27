@@ -1,0 +1,23 @@
+package com.lingosphinx.quiz.controller;
+import com.lingosphinx.quiz.domain.LanguageCode;
+import com.lingosphinx.quiz.dto.StudyListDto;
+import com.lingosphinx.quiz.service.StudyListService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/me/study-list")
+@RequiredArgsConstructor
+@Tag(name = "CurrentStudyList API")
+public class CurrentStudyListController {
+
+    private final StudyListService studyListService;
+
+    @PostMapping("{language}")
+    public ResponseEntity<StudyListDto> activate(@PathVariable String language) {
+        return ResponseEntity.ok(studyListService.activate(LanguageCode.valueOf(language)));
+    }
+
+}

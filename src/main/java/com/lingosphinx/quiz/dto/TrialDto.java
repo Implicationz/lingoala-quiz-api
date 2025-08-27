@@ -1,7 +1,5 @@
 package com.lingosphinx.quiz.dto;
 
-import com.lingosphinx.quiz.domain.Question;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;

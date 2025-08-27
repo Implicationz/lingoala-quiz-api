@@ -1,7 +1,5 @@
 package com.lingosphinx.quiz.domain;
 
-import java.time.Instant;
-
 public class SimplifiedSuperMemo2SchedulingStrategy implements SchedulingStrategy {
 
 

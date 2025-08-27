@@ -1,6 +1,5 @@
 package com.lingosphinx.quiz.domain;
 
-import com.lingosphinx.quiz.domain.Explanation;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;

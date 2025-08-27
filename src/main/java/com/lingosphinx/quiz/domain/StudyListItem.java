@@ -2,25 +2,30 @@ package com.lingosphinx.quiz.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
-public class NewFilterItem {
+public class StudyListItem {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private NewFilter filter;
+    private StudyList studyList;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Quiz quiz;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StudyStatus newQuestions = StudyStatus.DISABLED;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StudyStatus dueQuestions = StudyStatus.DISABLED;
 }
 
 

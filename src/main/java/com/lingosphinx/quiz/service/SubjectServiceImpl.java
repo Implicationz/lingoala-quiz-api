@@ -1,11 +1,8 @@
 package com.lingosphinx.quiz.service;
 
-import com.lingosphinx.quiz.domain.Subject;
 import com.lingosphinx.quiz.dto.SubjectDto;
 import com.lingosphinx.quiz.mapper.SubjectMapper;
-import com.lingosphinx.quiz.repository.QuizRepository;
 import com.lingosphinx.quiz.repository.SubjectRepository;
-import com.lingosphinx.quiz.repository.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;

@@ -1,6 +1,5 @@
 package com.lingosphinx.quiz.domain;
 
-import com.lingosphinx.quiz.domain.LanguageCode;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

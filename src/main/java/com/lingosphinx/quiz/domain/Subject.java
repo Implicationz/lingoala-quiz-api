@@ -2,7 +2,6 @@ package com.lingosphinx.quiz.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.*;
 
 @Entity
 @Table(name = "subject")

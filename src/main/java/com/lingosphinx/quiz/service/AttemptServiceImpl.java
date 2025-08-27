@@ -1,23 +1,15 @@
 package com.lingosphinx.quiz.service;
 
-import com.lingosphinx.quiz.domain.Attempt;
 import com.lingosphinx.quiz.domain.SchedulingStrategy;
-import com.lingosphinx.quiz.domain.Trial;
 import com.lingosphinx.quiz.dto.AttemptDto;
 import com.lingosphinx.quiz.mapper.AttemptMapper;
-import com.lingosphinx.quiz.mapper.TrialMapper;
-import com.lingosphinx.quiz.repository.*;
+import com.lingosphinx.quiz.repository.AttemptRepository;
+import com.lingosphinx.quiz.repository.TrialRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service

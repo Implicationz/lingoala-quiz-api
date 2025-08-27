@@ -1,4 +1,4 @@
-package com.lingosphinx.quiz.domain;
+package com.lingosphinx.quiz.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Builder
-public class Overview {
+public class StudyListOverviewItem {
+    final private long quiz;
     final private long newCount;
     final private long dueCount;
 }

@@ -1,6 +1,5 @@
 package com.lingosphinx.quiz.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @Getter @Setter

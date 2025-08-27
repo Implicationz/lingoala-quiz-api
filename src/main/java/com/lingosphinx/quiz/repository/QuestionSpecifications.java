@@ -1,16 +1,26 @@
-// src/main/java/com/lingosphinx/quiz/repository/QuestionSpecifications.java
 package com.lingosphinx.quiz.repository;
 
-import com.lingosphinx.quiz.domain.LanguageCode;
-import com.lingosphinx.quiz.domain.Question;
-import com.lingosphinx.quiz.domain.Trial;
-import jakarta.persistence.criteria.JoinType;
+import com.lingosphinx.quiz.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.Instant;
 import java.util.UUID;
 
 public class QuestionSpecifications {
+
+    public static Specification<Question> studyListEnabledForUser(UUID userId) {
+        return (root, query, cb) -> {
+            var subquery = query.subquery(Long.class);
+            var sliRoot = subquery.from(StudyListItem.class);
+            subquery.select(sliRoot.get("id"))
+                    .where(
+                            cb.equal(sliRoot.get("quiz").get("id"), root.get("quiz").get("id")),
+                            cb.equal(sliRoot.get("studyList").get("userId"), userId),
+                            cb.equal(sliRoot.get("newQuestions"), StudyStatus.ENABLED)
+                    );
+            return cb.exists(subquery);
+        };
+    }
+
     public static Specification<Question> noTrialForUser(UUID userId) {
         return (root, query, cb) -> {
             var subquery = query.subquery(Long.class);
@@ -32,7 +42,7 @@ public class QuestionSpecifications {
         return (root, query, cb) -> cb.equal(root.get("quiz").get("language"), language.getValue());
     }
     public static Specification<Question> isNew(UUID userId, LanguageCode language) {
-        var spec = noTrialForUser(userId).and(quizLanguageEquals(language));
+        var spec = studyListEnabledForUser(userId).and(noTrialForUser(userId)).and(quizLanguageEquals(language));
         return spec;
     }
 

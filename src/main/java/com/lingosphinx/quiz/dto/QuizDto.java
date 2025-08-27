@@ -2,7 +2,6 @@ package com.lingosphinx.quiz.dto;
 
 import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.domain.QuizTag;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
 package com.lingosphinx.quiz.security;
 
-import com.lingosphinx.quiz.security.CorsProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

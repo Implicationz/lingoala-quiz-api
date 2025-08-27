@@ -8,8 +8,6 @@ import com.lingosphinx.quiz.dto.QuestionDto;
 import com.lingosphinx.quiz.dto.QuizDto;
 import org.mapstruct.*;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface QuestionMapper {
     QuestionDto toDto(Question question);

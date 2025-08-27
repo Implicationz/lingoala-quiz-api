@@ -1,6 +1,5 @@
 package com.lingosphinx.quiz.service;
 
-import com.lingosphinx.quiz.domain.Quiz;
 import com.lingosphinx.quiz.dto.QuizDto;
 import com.lingosphinx.quiz.mapper.QuizMapper;
 import com.lingosphinx.quiz.repository.QuizRepository;
@@ -8,8 +7,6 @@ import com.lingosphinx.quiz.repository.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

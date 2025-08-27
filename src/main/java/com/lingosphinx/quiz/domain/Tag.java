@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @BatchSize(size = 30)
 @Entity
 @Getter @Setter

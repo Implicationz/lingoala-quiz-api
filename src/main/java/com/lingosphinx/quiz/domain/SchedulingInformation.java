@@ -2,10 +2,7 @@ package com.lingosphinx.quiz.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import lombok.*;
-
-import java.time.Instant;
 
 @Embeddable
 @Getter

@@ -2,12 +2,10 @@ package com.lingosphinx.quiz.service;
 
 import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.domain.Overview;
-import com.lingosphinx.quiz.domain.SchedulingStrategy;
 import com.lingosphinx.quiz.repository.QuestionRepository;
 import com.lingosphinx.quiz.repository.QuestionSpecifications;
 import com.lingosphinx.quiz.repository.TrialRepository;
 import com.lingosphinx.quiz.repository.TrialSpecifications;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
