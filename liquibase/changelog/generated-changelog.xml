@@ -1,119 +1,212 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="Lutz (generated)" id="1753390859857-1">
-        <modifyDataType columnName="text" newDataType="clob" tableName="answer"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1753390859857-2">
-        <modifyDataType columnName="text" newDataType="clob" tableName="question"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1753390859857-3">
-        <modifyDataType columnName="transcription" newDataType="clob" tableName="answer"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1753390859857-4">
-        <modifyDataType columnName="transcription" newDataType="clob" tableName="question"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1753390859857-5">
-        <modifyDataType columnName="translation" newDataType="clob" tableName="answer"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1753390859857-6">
-        <modifyDataType columnName="translation" newDataType="clob" tableName="question"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1753392080256-1">
-        <modifyDataType columnName="explanation_text" newDataType="clob" tableName="question"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1753392080256-2">
-        <modifyDataType columnName="explanation_transcription" newDataType="clob" tableName="question"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1753392080256-3">
-        <modifyDataType columnName="explanation_translation" newDataType="clob" tableName="question"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-8">
-        <dropForeignKeyConstraint baseTableName="new_filter_item" constraintName="fk5kghnuvmc6v1sk6d9b1861tsp"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-9">
-        <dropForeignKeyConstraint baseTableName="due_filter_item" constraintName="fk7hkylfjw40a2mlewn62823483"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-10">
-        <dropForeignKeyConstraint baseTableName="due_filter_item" constraintName="fkjmn8npbr25bn37hdy66f7l21c"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-11">
-        <dropForeignKeyConstraint baseTableName="new_filter_item" constraintName="fkky9w616smjhotpfh7pawv5xs1"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-1">
-        <createTable tableName="study_list_item">
+    <changeSet author="Lutz (generated)" id="1756777322143-1">
+        <createTable tableName="quiz">
             <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="study_list_item_pkey"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="quiz_pkey"/>
             </column>
-            <column name="quiz_id" type="BIGINT">
+            <column name="image" type="VARCHAR(255)"/>
+            <column name="language" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="study_list_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="due_questions" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="new_questions" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="source" type="VARCHAR(255)"/>
+            <column name="user_id" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-2">
-        <createTable tableName="study_list">
+    <changeSet author="Lutz (generated)" id="1756777322143-2">
+        <createTable tableName="trial">
+            <column name="ease_factor" type="FLOAT8"/>
+            <column name="failure_count" type="INTEGER"/>
+            <column name="interval_days" type="INTEGER"/>
+            <column name="success_count" type="INTEGER"/>
             <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="study_list_pkey"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="trial_pkey"/>
+            </column>
+            <column name="last_attempted_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="next_due_date" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="false"/>
             </column>
             <column name="user_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-3">
+        <createTable tableName="subject">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="subject_pkey"/>
+            </column>
             <column name="language" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-3">
-        <addUniqueConstraint columnNames="user_id, language" constraintName="study_list_user_id_language_key" tableName="study_list"/>
+    <changeSet author="Lutz (generated)" id="1756777322143-4">
+        <createTable tableName="topic">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="topic_pkey"/>
+            </column>
+            <column name="subject_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-4">
-        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="study_list_item_seq" startValue="1"/>
+    <changeSet author="Lutz (generated)" id="1756777322143-5">
+        <createIndex indexName="idx88ovrqpw312vxuhoe8en42d1e" tableName="quiz" using="btree">
+            <column name="language"/>
+        </createIndex>
     </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-5">
-        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="study_list_seq" startValue="1"/>
+    <changeSet author="Lutz (generated)" id="1756777322143-6">
+        <createIndex indexName="idxc4ht1k8e7nb3mvy2k3vmpihvs" tableName="trial" using="btree">
+            <column name="user_id"/>
+        </createIndex>
     </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-6">
-        <addForeignKeyConstraint baseColumnNames="study_list_id" baseTableName="study_list_item" constraintName="fkacoeuncmfbix6e7aa931rovuf" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="study_list" validate="true"/>
+    <changeSet author="Lutz (generated)" id="1756777322143-7">
+        <createIndex indexName="idxjspmj7qq8ltmnkgegt8dyt812" tableName="trial" using="btree">
+            <column name="next_due_date"/>
+        </createIndex>
     </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-7">
+    <changeSet author="Lutz (generated)" id="1756777322143-8">
+        <addUniqueConstraint columnNames="name" constraintName="subject_name_key" tableName="subject"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-9">
+        <addUniqueConstraint columnNames="name" constraintName="topic_name_key" tableName="topic"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-10">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="answer_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-11">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="attempt_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-12">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="question_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-13">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="quiz_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-14">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="quiz_tag_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-15">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="subject_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-16">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="tag_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-17">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="topic_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-18">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="trial_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-19">
+        <createTable tableName="answer">
+            <column name="correct" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="answer_pkey"/>
+            </column>
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transcription" type="TEXT"/>
+            <column name="translation" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-20">
+        <createTable tableName="attempt">
+            <column name="answer_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="attempt_pkey"/>
+            </column>
+            <column name="trial_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-21">
+        <createTable tableName="question">
+            <column name="difficulty" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="question_pkey"/>
+            </column>
+            <column name="quiz_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="explanation_text" type="TEXT"/>
+            <column name="explanation_transcription" type="TEXT"/>
+            <column name="explanation_translation" type="TEXT"/>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transcription" type="TEXT"/>
+            <column name="translation" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-22">
+        <createTable tableName="quiz_tag">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="quiz_tag_pkey"/>
+            </column>
+            <column name="quiz_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-23">
+        <createTable tableName="tag">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tag_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(2048)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-24">
+        <addForeignKeyConstraint baseColumnNames="answer_id" baseTableName="attempt" constraintName="fk2059fao5c6v26xi4nnh8bb4ac" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="answer" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-25">
+        <addForeignKeyConstraint baseColumnNames="question_id" baseTableName="trial" constraintName="fk375rrlw6aycn24fk0m2v3t33" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="question" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-26">
+        <addForeignKeyConstraint baseColumnNames="trial_id" baseTableName="attempt" constraintName="fk7udn3xpadlje9shnr7nb25hop" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="trial" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-27">
+        <addForeignKeyConstraint baseColumnNames="question_id" baseTableName="answer" constraintName="fk8frr4bcabmmeyyu60qt7iiblo" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="question" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-28">
+        <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="topic" constraintName="fka36s3q1p2kfgtp51ydh0tx4cc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="subject" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-29">
+        <addForeignKeyConstraint baseColumnNames="quiz_id" baseTableName="question" constraintName="fkb0yh0c1qaxfwlcnwo9dms2txf" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="quiz" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1756777322143-30">
         <addForeignKeyConstraint baseColumnNames="quiz_id" baseTableName="study_list_item" constraintName="fkoqmj8wv1vkoyt7gr7563gn35w" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="quiz" validate="true"/>
     </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-12">
-        <dropUniqueConstraint constraintName="uk5069rpqc4l3flpqirrg37m8kq" tableName="due_filter"/>
+    <changeSet author="Lutz (generated)" id="1756777322143-31">
+        <addForeignKeyConstraint baseColumnNames="tag_id" baseTableName="quiz_tag" constraintName="fkpoqwbet3lcpr7kp4e9dxq3jdx" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag" validate="true"/>
     </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-13">
-        <dropUniqueConstraint constraintName="uk9n76h4iymmeibkeiw0lht0ahg" tableName="new_filter"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-14">
-        <dropTable tableName="due_filter"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-15">
-        <dropTable tableName="due_filter_item"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-16">
-        <dropTable tableName="new_filter"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-17">
-        <dropTable tableName="new_filter_item"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-18">
-        <dropSequence sequenceName="due_filter_item_seq"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-19">
-        <dropSequence sequenceName="due_filter_seq"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-20">
-        <dropSequence sequenceName="new_filter_item_seq"/>
-    </changeSet>
-    <changeSet author="Lutz (generated)" id="1756306360866-21">
-        <dropSequence sequenceName="new_filter_seq"/>
+    <changeSet author="Lutz (generated)" id="1756777322143-32">
+        <addForeignKeyConstraint baseColumnNames="quiz_id" baseTableName="quiz_tag" constraintName="fksnioqfjjj28j2agskr29ch7qs" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="quiz" validate="true"/>
     </changeSet>
 </databaseChangeLog>

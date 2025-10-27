@@ -2,6 +2,7 @@ package com.lingosphinx.quiz.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 
 import java.time.Instant;
@@ -18,11 +19,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Trial {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+@SuperBuilder
+public class Trial extends BaseEntity {
 
     @Column(name = "user_id", nullable = false)
     private UUID userId;

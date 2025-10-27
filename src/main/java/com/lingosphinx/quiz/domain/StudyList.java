@@ -2,6 +2,7 @@ package com.lingosphinx.quiz.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
@@ -9,15 +10,15 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @Table(
         uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "language"})
 )
-public class StudyList {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+public class StudyList extends BaseEntity {
 
     @Column(nullable = false)
     private UUID userId;

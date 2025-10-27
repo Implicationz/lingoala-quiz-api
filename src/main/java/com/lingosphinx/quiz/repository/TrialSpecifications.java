@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class TrialSpecifications {
 
@@ -57,8 +58,11 @@ public class TrialSpecifications {
         return spec;
     }
     public static Specification<Trial> randomOrder() {
+        final var seed = ThreadLocalRandom.current().nextDouble();
         return (root, query, cb) -> {
-            query.orderBy(cb.asc(cb.function("RANDOM", Double.class)));
+            query.orderBy(
+                    cb.asc(cb.abs(cb.diff(root.get("question").get("randomSeed"), seed)))
+            );
             return cb.conjunction();
         };
     }

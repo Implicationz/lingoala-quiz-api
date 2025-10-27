@@ -2,6 +2,7 @@ package com.lingosphinx.quiz.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
@@ -14,12 +15,12 @@ import java.util.Set;
 @Table(name = "quiz", indexes = {
     @Index(columnList = "language")
 })
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
-public class Quiz {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class Quiz extends BaseEntity {
 
     @Column(nullable = false)
     private LanguageCode language;

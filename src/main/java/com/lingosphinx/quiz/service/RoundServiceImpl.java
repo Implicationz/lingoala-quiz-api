@@ -43,7 +43,7 @@ public class RoundServiceImpl implements RoundService {
         var trials = questions.stream().map(q -> Trial.builder()
                         .question(q)
                         .userId(currentUserId)
-                        .build());
+                        .build()).map(Trial.class::cast);
         return trials;
     }
 

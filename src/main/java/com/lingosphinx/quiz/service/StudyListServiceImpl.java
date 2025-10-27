@@ -9,6 +9,7 @@ import com.lingosphinx.quiz.dto.StudyListOverview;
 import com.lingosphinx.quiz.dto.StudyListOverviewItem;
 import com.lingosphinx.quiz.mapper.StudyListMapper;
 import com.lingosphinx.quiz.repository.QuestionRepository;
+import com.lingosphinx.quiz.repository.QuizRepository;
 import com.lingosphinx.quiz.repository.StudyListRepository;
 import com.lingosphinx.quiz.repository.TrialRepository;
 import com.lingosphinx.quiz.utility.EntitySyncUtils;
@@ -31,6 +32,7 @@ public class StudyListServiceImpl implements StudyListService {
     private final UserService userService;
     private final StudyListRepository studyListRepository;
     private final StudyListMapper studyListMapper;
+    private final QuizRepository quizRepository;
 
     private final TrialRepository trialRepository;
     private final QuestionRepository questionRepository;
@@ -68,7 +70,11 @@ public class StudyListServiceImpl implements StudyListService {
                 StudyListItemDto::getId,
                 studyListMapper::toEntity,
                 item -> item.setStudyList(existingStudyList),
-                studyListMapper::updateEntityFromDto
+                (studyListItemDto, studyListItem) -> {
+                    studyListMapper.updateEntityFromDto(studyListItemDto, studyListItem);
+                    studyListItem.setStudyList(studyListRepository.getReferenceById(studyListItemDto.getStudyList().getId()));
+                    studyListItem.setQuiz(quizRepository.getReferenceById(studyListItemDto.getQuiz().getId()));
+                }
         );
         var savedStudyList = studyListRepository.save(existingStudyList);
         studyListRepository.flush();

@@ -4,6 +4,7 @@ import com.lingosphinx.quiz.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class QuestionSpecifications {
 
@@ -52,8 +53,11 @@ public class QuestionSpecifications {
     }
 
     public static Specification<Question> randomOrder() {
+        final var seed = ThreadLocalRandom.current().nextDouble();
         return (root, query, cb) -> {
-            query.orderBy(cb.asc(cb.function("RANDOM", Double.class)));
+            query.orderBy(
+                    cb.asc(cb.abs(cb.diff(root.get("randomSeed"), seed)))
+            );
             return cb.conjunction();
         };
     }

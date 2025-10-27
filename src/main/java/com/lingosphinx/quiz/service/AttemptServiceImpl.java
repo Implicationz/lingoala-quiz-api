@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,14 +27,11 @@ public class AttemptServiceImpl implements AttemptService {
     @Override
     public AttemptDto create(AttemptDto dto) {
         var attempt = attemptMapper.toEntity(dto);
-        var trial = attempt.getTrial();
 
-        var id = trial.getId();
-        var exists = id != null && id > 0;
-        if(exists) {
-            trial = trialRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Trial not found"));
-        }
+        var trial = Optional.ofNullable(attempt.getTrial().getId())
+                .filter(id -> id > 0)
+                .flatMap(trialRepository::findById)
+                .orElse(attempt.getTrial());
 
         trial.setSchedulingStrategy(schedulingStrategy);
         trial.apply(attempt);
@@ -40,6 +39,8 @@ public class AttemptServiceImpl implements AttemptService {
 
         attempt.setTrial(trial);
         attemptRepository.save(attempt);
+        log.info("Attempt created, id={}", attempt.getId());
+
         return attemptMapper.toDto(attempt);
     }
 }
