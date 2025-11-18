@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Round {
-    private LanguageCode language;
+    private StudyList studyList;
     private Quiz quiz;
     private int newCount;
     private int dueCount;

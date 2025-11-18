@@ -1,9 +1,12 @@
 package com.lingosphinx.quiz.service;
 
+import com.lingosphinx.quiz.domain.Question;
+import com.lingosphinx.quiz.dto.QuestionDto;
 import com.lingosphinx.quiz.dto.QuizDto;
 import com.lingosphinx.quiz.mapper.QuizMapper;
 import com.lingosphinx.quiz.repository.QuizRepository;
 import com.lingosphinx.quiz.repository.TopicRepository;
+import com.lingosphinx.quiz.utility.EntitySyncUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +58,17 @@ public class QuizServiceImpl implements QuizService {
         var existingQuiz = quizRepository.findWithQuestionsById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Quiz not found"));
 
-        this.quizMapper.updateEntityFromDto(quizDto, existingQuiz);
-
+        quizMapper.updateEntityFromDto(quizDto, existingQuiz);
+        EntitySyncUtils.syncChildEntities(existingQuiz.getQuestions(), quizDto.getQuestions(),
+                Question::getId,
+                QuestionDto::getId,
+                quizMapper::toEntity,
+                item -> item.setQuiz(existingQuiz),
+                (questionDto, question) -> {
+                    quizMapper.updateEntityFromDto(questionDto, question);
+                    question.setQuiz(quizRepository.getReferenceById(questionDto.getQuiz().getId()));
+                }
+        );
         var savedQuiz = quizRepository.save(existingQuiz);
         log.info("Quiz updated successfully: id={}", savedQuiz.getId());
         return quizMapper.toDto(savedQuiz);

@@ -2,6 +2,7 @@ package com.lingosphinx.quiz.dto;
 
 import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.domain.QuizTag;
+import com.lingosphinx.quiz.domain.Visibility;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -15,7 +16,10 @@ public class QuizDto {
     private Long id;
     private LanguageCode language;
     private String name;
-    private String userId;
+    private StudentDto owner;
+
+    @Builder.Default
+    private Visibility visibility = Visibility.PRIVATE;
 
     @Builder.Default
     private List<QuestionDto> questions = new ArrayList<>();

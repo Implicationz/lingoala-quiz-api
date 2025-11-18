@@ -5,7 +5,6 @@ import com.lingosphinx.quiz.mapper.StudyListItemMapper;
 import com.lingosphinx.quiz.repository.QuizRepository;
 import com.lingosphinx.quiz.repository.StudyListItemRepository;
 import com.lingosphinx.quiz.repository.StudyListRepository;
-import com.lingosphinx.quiz.repository.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

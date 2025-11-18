@@ -1,5 +1,7 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet author="Lutz (generated)" id="1756777322143-1">
         <createTable tableName="quiz">
             <column name="id" type="BIGINT">
@@ -208,5 +210,98 @@
     </changeSet>
     <changeSet author="Lutz (generated)" id="1756777322143-32">
         <addForeignKeyConstraint baseColumnNames="quiz_id" baseTableName="quiz_tag" constraintName="fksnioqfjjj28j2agskr29ch7qs" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="quiz" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1761546538559-1">
+        <addColumn tableName="question">
+            <column name="random_seed" type="FLOAT8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-2">
+        <createTable tableName="student">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="student_pkey"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="access_level" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-3">
+        <createIndex indexName="idx_student_user_id" tableName="student" using="btree">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-4">
+        <addUniqueConstraint columnNames="subject_id, name" constraintName="uk8g5697qxoxynuflv0b8dy36b0" tableName="topic"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-5">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807" minValue="1" sequenceName="student_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-6">
+        <addColumn tableName="subject">
+            <column name="image" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-7">
+        <addColumn tableName="topic">
+            <column name="image" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-8">
+        <addColumn tableName="study_list">
+            <column name="student_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-9">
+        <addColumn tableName="quiz">
+            <column name="topic_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-10">
+        <addColumn tableName="quiz">
+            <column name="subject_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-11">
+        <addColumn tableName="quiz">
+            <column name="visibility" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-12">
+        <addColumn tableName="quiz">
+            <column name="owner_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-13">
+        <addColumn tableName="trial">
+            <column name="student_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-14">
+        <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="quiz" constraintName="fk2bn6jb1u6wox8j2oh77k4vyp4" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="subject" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-15">
+        <addForeignKeyConstraint baseColumnNames="topic_id" baseTableName="quiz" constraintName="fk4d4j42j00qw47k83o86umv38m" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="topic" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-16">
+        <addForeignKeyConstraint baseColumnNames="student_id" baseTableName="trial" constraintName="fk6q3puukpp8vu124e86yearq0s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="student" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-17">
+        <addForeignKeyConstraint baseColumnNames="student_id" baseTableName="study_list" constraintName="fkgix89cvdixbwff2xcfyk1bf7d" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="student" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-18">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="quiz" constraintName="fkn3w1tvknsw1jwkko53gujwwhi" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="student" validate="true"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-19">
+        <dropColumn columnName="language" tableName="subject"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1763466736670-1">
+        <modifyDataType columnName="name" newDataType="varchar(4092)" tableName="tag"/>
     </changeSet>
 </databaseChangeLog>

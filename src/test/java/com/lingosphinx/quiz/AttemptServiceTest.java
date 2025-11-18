@@ -1,11 +1,12 @@
-// Datei: src/test/java/com/lingosphinx/quiz/AttemptServiceTest.java
 package com.lingosphinx.quiz;
 
 import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.dto.*;
 import com.lingosphinx.quiz.service.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,11 +20,13 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AttemptServiceTest {
 
     @Container
@@ -34,6 +37,7 @@ class AttemptServiceTest {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("GAMIFICATION_CLIENT_URL", () -> "localhost");
     }
 
     @Autowired
@@ -51,14 +55,24 @@ class AttemptServiceTest {
     @Autowired
     private TopicService topicService;
 
+    @Autowired
+    private StudentService studentService;
+
+    private StudentDto student;
     private TrialDto trial;
     private AnswerDto correctAnswer;
+
+    @BeforeAll
+    void registerStudent() {
+        studentService.register(StudentRegistrationDto.builder().build());
+        var read = studentService.readCurrent();
+        student = StudentDto.builder().id(read.getId()).build();
+    }
 
     @BeforeEach
     void setup() {
         var subject = subjectService.create(SubjectDto.builder()
                 .name("English")
-                .language(LanguageCode.ENGLISH)
                 .build());
         var topic = topicService.create(TopicDto.builder()
                 .name("Literature")
@@ -67,7 +81,7 @@ class AttemptServiceTest {
         var quiz = quizService.create(QuizDto.builder()
                 .language(LanguageCode.ENGLISH)
                 .name("Test Quiz")
-                .userId("user-1")
+                .owner(student)
                 .source("Custom")
                 .build());
 
@@ -92,7 +106,7 @@ class AttemptServiceTest {
 
         trial = trialService.create(TrialDto.builder()
                 .question(quiz.getQuestions().get(0))
-                .userId(UUID.randomUUID())
+                .student(student)
                 .nextDueDate(Instant.now())
                 .build());
 

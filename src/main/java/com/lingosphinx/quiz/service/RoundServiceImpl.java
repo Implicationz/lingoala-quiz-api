@@ -1,13 +1,12 @@
 package com.lingosphinx.quiz.service;
 
 import com.lingosphinx.quiz.domain.Round;
+import com.lingosphinx.quiz.domain.Student;
+import com.lingosphinx.quiz.domain.StudyList;
 import com.lingosphinx.quiz.domain.Trial;
 import com.lingosphinx.quiz.dto.RoundDto;
 import com.lingosphinx.quiz.mapper.RoundMapper;
-import com.lingosphinx.quiz.repository.QuestionRepository;
-import com.lingosphinx.quiz.repository.QuestionSpecifications;
-import com.lingosphinx.quiz.repository.TrialRepository;
-import com.lingosphinx.quiz.repository.TrialSpecifications;
+import com.lingosphinx.quiz.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -22,41 +21,40 @@ import java.util.stream.Stream;
 @Transactional
 public class RoundServiceImpl implements RoundService {
 
+    private final StudyListRepository studyListRepository;
     private final TrialRepository trialRepository;
     private final QuestionRepository questionRepository;
-    private final UserService userService;
+    private final StudentService studentService;
     private final RoundMapper roundMapper;
 
-    protected Stream<Trial> newTrials(Round round) {
+    protected Stream<Trial> newTrials(Student student, StudyList studyList, Round round) {
         if(round.getNewCount() <= 0) {
             return Stream.empty();
         }
-        var currentUserId = this.userService.getCurrentUserId();
         var quiz = round.getQuiz();
 
         var spec = round.getQuiz() != null
-                ? QuestionSpecifications.isNew(currentUserId, quiz.getId())
-                : QuestionSpecifications.isNew(currentUserId, round.getLanguage());
+                ? QuestionSpecifications.isNew(student, quiz.getId())
+                : QuestionSpecifications.isNew(student, studyList);
         spec = spec.and(QuestionSpecifications.randomOrder());
 
         var questions = questionRepository.findAll(spec, PageRequest.of(0, round.getNewCount()));
         var trials = questions.stream().map(q -> Trial.builder()
                         .question(q)
-                        .userId(currentUserId)
+                        .student(student)
                         .build()).map(Trial.class::cast);
         return trials;
     }
 
-    protected Stream<Trial> dueTrials(Round round) {
+    protected Stream<Trial> dueTrials(Student student, StudyList studyList, Round round) {
         if(round.getDueCount() <= 0) {
             return Stream.empty();
         }
-        var currentUserId = this.userService.getCurrentUserId();
         var quiz = round.getQuiz();
 
         var spec = quiz != null
-                ? TrialSpecifications.isDue(currentUserId, quiz.getId())
-                : TrialSpecifications.isDue(currentUserId, round.getLanguage());
+                ? TrialSpecifications.isDue(student, quiz.getId())
+                : TrialSpecifications.isDue(student, studyList);
         spec = spec.and(TrialSpecifications.randomOrder());
 
         var trials = trialRepository.findAll(spec, PageRequest.of(0, round.getDueCount())).stream();
@@ -66,15 +64,20 @@ public class RoundServiceImpl implements RoundService {
     @Override
     public RoundDto create(RoundDto dto) {
         var round = roundMapper.toEntity(dto);
-
-        var dueTrials = this.dueTrials(round);
-        var newTrials = this.newTrials(round);
-        var trials = Stream.concat(dueTrials, newTrials).toList();
+        var student = studentService.readCurrent();
+        StudyList studyList = null;
+        if(round.getStudyList() != null) {
+            studyList = studyListRepository.getReferenceById(round.getStudyList().getId());
+        }
+        var dueTrials = this.dueTrials(student, studyList, round).toList();
+        var newTrials = this.newTrials(student, studyList, round).toList();
+        var trials = Stream.concat(dueTrials.stream(), newTrials.stream()).toList();
         var entity = Round.builder()
-                .language(round.getLanguage())
+                .studyList(round.getStudyList())
                 .quiz(round.getQuiz())
                 .trials(trials)
-                .dueCount(trials.size())
+                .newCount(newTrials.size())
+                .dueCount(dueTrials.size())
                 .build();
 
         return roundMapper.toDto(entity);

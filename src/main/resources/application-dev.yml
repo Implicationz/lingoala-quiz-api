@@ -20,6 +20,9 @@ spring:
           batch_size: 50
         order_inserts: true
         order_updates: true
+  sql:
+    init:
+      mode: never
 cors:
   allowed-origins:
     - http://localhost:5173

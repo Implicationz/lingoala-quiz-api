@@ -4,18 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "topic")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"subject_id", "name"}))
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
-public class Topic {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+public class Topic extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Subject subject;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
+
+    private String image;
 }

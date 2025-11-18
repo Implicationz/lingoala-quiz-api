@@ -22,13 +22,23 @@ import java.util.Set;
 @SuperBuilder
 public class Quiz extends BaseEntity {
 
+    @ManyToOne
+    private Subject subject;
+
+    @ManyToOne(optional = true)
+    private Topic topic;
+
     @Column(nullable = false)
     private LanguageCode language;
 
     private String name;
 
-    @Column(name = "user_id")
-    private String userId;
+    @ManyToOne(optional = true)
+    private Student owner;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private Visibility visibility = Visibility.PRIVATE;
 
     @Builder.Default
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)

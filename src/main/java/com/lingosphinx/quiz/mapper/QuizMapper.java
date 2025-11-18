@@ -30,4 +30,5 @@ public interface QuizMapper {
     }
 
     void updateEntityFromDto(QuizDto quizDto, @MappingTarget Quiz existingQuiz);
+    void updateEntityFromDto(QuestionDto questionDto, @MappingTarget Question existingQuestion);
 }

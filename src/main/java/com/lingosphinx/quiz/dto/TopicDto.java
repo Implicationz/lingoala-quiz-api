@@ -8,4 +8,5 @@ public class TopicDto {
     private Long id;
     private SubjectDto subject;
     private String name;
+    private String image;
 }

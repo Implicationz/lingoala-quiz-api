@@ -1,12 +1,16 @@
 package com.lingosphinx.quiz.dto;
 
-import com.lingosphinx.quiz.domain.LanguageCode;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class SubjectDto {
     private Long id;
     private String name;
-    private LanguageCode language;
+    private String image;
+    @Builder.Default
+    private List<TopicDto> topics = new ArrayList<>();
 }

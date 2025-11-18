@@ -1,7 +1,11 @@
 package com.lingosphinx.quiz.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 
@@ -13,7 +17,7 @@ import org.hibernate.annotations.BatchSize;
 @SuperBuilder
 public class Tag extends BaseEntity {
 
-    @Column(nullable = false, length = 2048)
+    @Column(nullable = false, length = 4092)
     private String name;
 }
 

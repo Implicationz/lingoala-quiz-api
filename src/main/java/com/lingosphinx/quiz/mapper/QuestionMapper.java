@@ -27,4 +27,8 @@ public interface QuestionMapper {
     default void linkAnswers(@MappingTarget Question question) {
         question.linkAnswers();
     }
+
+    void updateEntityFromDto(QuestionDto questionDto, @MappingTarget Question existing);
+
+    void updateFromDto(AnswerDto answerDto, @MappingTarget Answer answer);
 }

@@ -55,4 +55,9 @@ public class TopicServiceImpl implements TopicService {
     public void delete(Long id) {
         topicRepository.deleteById(id);
     }
+
+    @Override
+    public List<TopicDto> readAll(String name) {
+        return List.of();
+    }
 }

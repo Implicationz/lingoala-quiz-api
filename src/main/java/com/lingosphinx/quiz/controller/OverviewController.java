@@ -21,8 +21,8 @@ public class OverviewController {
     private final OverviewService overviewService;
 
 
-    @GetMapping("/{language}")
-    public ResponseEntity<Overview> read(@PathVariable LanguageCode language) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(overviewService.readByLanguage(language));
+    @GetMapping("/{studyList}")
+    public ResponseEntity<Overview> read(@PathVariable Long studyList) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(overviewService.readByStudyList(studyList));
     }
 }

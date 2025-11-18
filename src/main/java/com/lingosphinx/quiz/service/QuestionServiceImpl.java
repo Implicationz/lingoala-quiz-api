@@ -1,80 +1,82 @@
 package com.lingosphinx.quiz.service;
 
-import com.lingosphinx.quiz.domain.Question;
-import com.lingosphinx.quiz.domain.Quiz;
+import com.lingosphinx.quiz.domain.Answer;
+import com.lingosphinx.quiz.dto.AnswerDto;
+import com.lingosphinx.quiz.dto.QuestionDto;
+import com.lingosphinx.quiz.mapper.QuestionMapper;
+import com.lingosphinx.quiz.repository.QuestionRepository;
+import com.lingosphinx.quiz.repository.QuizRepository;
+import com.lingosphinx.quiz.utility.EntitySyncUtils;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class QuestionServiceImpl implements QuestionService {
 
-    private final AnswerService answerService;
+    private final QuestionRepository questionRepository;
+    private final QuizRepository quizRepository;
+    private final QuestionMapper questionMapper;
 
-    public QuestionServiceImpl(AnswerService answerService) {
-        this.answerService = answerService;
+    @Override
+    public QuestionDto create(QuestionDto questionDto) {
+        var question = questionMapper.toEntity(questionDto);
+        var saved = questionRepository.save(question);
+        log.info("Question created successfully: id={}", saved.getId());
+        return questionMapper.toDto(saved);
     }
 
     @Override
-    public void createAll(Quiz quiz, List<Question> questions) {
-        for (var question : questions) {
-            question.setQuiz(quiz);
-            if (question.getAnswers() != null) {
-                for (var answer : question.getAnswers()) {
-                    answer.setQuestion(question);
-                }
-            }
-            quiz.getQuestions().add(question);
-        }
+    @Transactional(readOnly = true)
+    public QuestionDto readById(Long id) {
+        var question = questionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+        log.info("Question read successfully: id={}", id);
+        return questionMapper.toDto(question);
     }
 
     @Override
-    public void syncQuestions(Quiz existingQuiz, List<Question> incomingQuestions) {
-        var existingMap = existingQuiz.getQuestions().stream()
-                .collect(Collectors.toMap(Question::getId, q -> q));
-
-        var updatedList = new ArrayList<Question>();
-        var newQuestions = new ArrayList<Question>();
-
-        for (var incoming : incomingQuestions) {
-            if (incoming.getId() == null) {
-                incoming.setQuiz(existingQuiz);
-                newQuestions.add(incoming);
-                updatedList.add(incoming);
-                continue;
-            }
-
-            var existing = existingMap.remove(incoming.getId());
-            if (existing != null) {
-                existing.setText(incoming.getText());
-                existing.setTranslation(incoming.getTranslation());
-                existing.setTranscription(incoming.getTranscription());
-                existing.setExplanation(incoming.getExplanation());
-                existing.setDifficulty(incoming.getDifficulty());
-                answerService.syncAnswers(existing, incoming.getAnswers());
-                updatedList.add(existing);
-            }
-        }
-
-        if (!newQuestions.isEmpty()) {
-            this.createAll(existingQuiz, newQuestions);
-        }
-
-        deleteAll(existingQuiz, new HashSet<>(updatedList));
-
-        existingQuiz.getQuestions().clear();
-        updatedList.forEach(q -> {
-            q.setQuiz(existingQuiz);
-            existingQuiz.getQuestions().add(q);
-        });
+    @Transactional(readOnly = true)
+    public List<QuestionDto> readAll() {
+        var result = questionRepository.findAll().stream()
+                .map(questionMapper::toDto)
+                .toList();
+        log.info("All questions read successfully, count={}", result.size());
+        return result;
     }
 
     @Override
-    public void deleteAll(Quiz quiz, Set<Question> toKeep) {
-        quiz.getQuestions().removeIf(q -> !toKeep.contains(q));
+    public QuestionDto update(Long id, QuestionDto questionDto) {
+        var existing = questionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+
+        questionMapper.updateEntityFromDto(questionDto, existing);
+
+        EntitySyncUtils.syncChildEntities(
+            existing.getAnswers(),
+            questionDto.getAnswers(),
+            Answer::getId,
+            AnswerDto::getId,
+            questionMapper::toEntity,
+            answer -> answer.setQuestion(existing),
+            questionMapper::updateFromDto
+        );
+
+        var saved = questionRepository.save(existing);
+        log.info("Question updated successfully: id={}", saved.getId());
+        return questionMapper.toDto(saved);
+    }
+
+    @Override
+    public void delete(Long id) {
+        questionRepository.deleteById(id);
+        log.info("Question deleted successfully: id={}", id);
     }
 }

@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class StudyListServiceImpl implements StudyListService {
 
     private final UserService userService;
+    private final StudentService studentService;
     private final StudyListRepository studyListRepository;
     private final StudyListMapper studyListMapper;
     private final QuizRepository quizRepository;
@@ -89,9 +90,10 @@ public class StudyListServiceImpl implements StudyListService {
     @Override
     public StudyListDto activate(LanguageCode language) {
         var userId = userService.getCurrentUserId();
-        var studyList = studyListRepository.findByUserIdAndLanguage(userId, language).orElseGet(() -> {
+        var student = studentService.readCurrent();
+        var studyList = studyListRepository.findByStudentAndLanguage(student, language).orElseGet(() -> {
                             var newStudyList = StudyList.builder()
-                                    .userId(userId)
+                                    .student(student)
                                     .language(language)
                                     .build();
                             return studyListRepository.save(newStudyList);
@@ -101,14 +103,15 @@ public class StudyListServiceImpl implements StudyListService {
     }
 
     public StudyListOverview getOverview(UUID userId, LanguageCode language) {
-        var studyList = studyListRepository.findByUserIdAndLanguage(userId, language)
+        var student = studentService.readCurrent();
+        var studyList = studyListRepository.findByStudentAndLanguage(student, language)
                 .orElseThrow(() -> new EntityNotFoundException("StudyList not found."));
         var quizIds = studyList.getItems().stream()
                 .map(item -> item.getQuiz().getId())
                 .toList();
 
-        var newCounts = questionRepository.countNewQuestionsByQuizIds(userId, quizIds);
-        var dueCounts = trialRepository.countDueTrialsByQuizIds(userId, quizIds, Instant.now());
+        var newCounts = questionRepository.countNewQuestionsByQuizIds(student, quizIds);
+        var dueCounts = trialRepository.countDueTrialsByQuizIds(student, quizIds, Instant.now());
 
         var newMap = newCounts.stream()
                 .collect(Collectors.toMap(row -> (Long) row[0], row -> (Long) row[1]));

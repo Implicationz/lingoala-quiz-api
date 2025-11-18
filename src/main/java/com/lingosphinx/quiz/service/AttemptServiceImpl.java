@@ -5,7 +5,6 @@ import com.lingosphinx.quiz.dto.AttemptDto;
 import com.lingosphinx.quiz.mapper.AttemptMapper;
 import com.lingosphinx.quiz.repository.AttemptRepository;
 import com.lingosphinx.quiz.repository.TrialRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,14 +1,15 @@
 package com.lingosphinx.quiz.mapper;
 
-import com.lingosphinx.quiz.domain.Answer;
+import com.lingosphinx.quiz.domain.Quiz;
 import com.lingosphinx.quiz.domain.StudyList;
 import com.lingosphinx.quiz.domain.StudyListItem;
-import com.lingosphinx.quiz.domain.Quiz;
-import com.lingosphinx.quiz.dto.AnswerDto;
+import com.lingosphinx.quiz.dto.QuizDto;
 import com.lingosphinx.quiz.dto.StudyListDto;
 import com.lingosphinx.quiz.dto.StudyListItemDto;
-import com.lingosphinx.quiz.dto.QuizDto;
-import org.mapstruct.*;
+import org.mapstruct.Builder;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface StudyListItemMapper {

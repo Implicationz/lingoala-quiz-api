@@ -1,13 +1,7 @@
 package com.lingosphinx.quiz.mapper;
 
-import com.lingosphinx.quiz.domain.Answer;
-import com.lingosphinx.quiz.domain.Question;
-import com.lingosphinx.quiz.domain.Round;
-import com.lingosphinx.quiz.domain.Trial;
-import com.lingosphinx.quiz.dto.AnswerDto;
-import com.lingosphinx.quiz.dto.QuestionDto;
-import com.lingosphinx.quiz.dto.RoundDto;
-import com.lingosphinx.quiz.dto.TrialDto;
+import com.lingosphinx.quiz.domain.*;
+import com.lingosphinx.quiz.dto.*;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,6 +10,13 @@ import org.mapstruct.Mapping;
 public interface RoundMapper {
     RoundDto toDto(Round round);
     Round toEntity(RoundDto roundDto);
+
+    @Mapping(target = "items", ignore = true)
+    @Mapping(target = "student", ignore = true)
+    StudyListDto toDto(StudyList studyList);
+    @Mapping(target = "items", ignore = true)
+    @Mapping(target = "student", ignore = true)
+    StudyList toEntity(StudyListDto studyListDto);
 
     @Mapping(target = "attempts", ignore = true)
     TrialDto toDto(Trial trial);

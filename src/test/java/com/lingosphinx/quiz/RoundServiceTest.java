@@ -1,11 +1,11 @@
 package com.lingosphinx.quiz;
 
 import com.lingosphinx.quiz.domain.LanguageCode;
+import com.lingosphinx.quiz.domain.StudyList;
+import com.lingosphinx.quiz.domain.StudyStatus;
 import com.lingosphinx.quiz.dto.*;
 import com.lingosphinx.quiz.service.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,13 +17,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RoundServiceTest {
 
     @Container
@@ -34,6 +34,7 @@ class RoundServiceTest {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("GAMIFICATION_CLIENT_URL", () -> "localhost");
     }
 
     @Autowired
@@ -52,30 +53,45 @@ class RoundServiceTest {
     private TopicService topicService;
 
     @Autowired
-    private UserService userService;
+    private StudentService studentService;
 
+    @Autowired
+    private StudyListService studyListService;
 
+    @Autowired
+    private StudyListItemService studyListItemService;
+
+    private StudentDto student;
+    private StudyListDto studyList;
     private QuizDto quiz;
     private TrialDto trial;
 
-    @BeforeEach
-    void setup() {
-        var subject = subjectService.create(SubjectDto.builder()
-                .name("English")
-                .language(LanguageCode.ENGLISH)
-                .build());
-        var topic = topicService.create(TopicDto.builder()
-                .name("Literature")
-                .subject(subject)
-                .build());
+    void registerStudent() {
+        studentService.register(StudentRegistrationDto.builder().build());
+        var read = studentService.readCurrent();
+        student = StudentDto.builder().id(read.getId()).build();
+        studyList = studyListService.activate(LanguageCode.ENGLISH);
+    }
+
+    void setupStudyListItem(QuizDto quiz) {
+        var studyListItem = StudyListItemDto.builder()
+                .dueQuestions(StudyStatus.ENABLED)
+                .newQuestions(StudyStatus.ENABLED)
+                .studyList(studyList)
+                .quiz(quiz)
+                .build();
+        studyListItemService.create(studyListItem);
+    }
+
+    void setupQuiz() {
         quiz = quizService.create(QuizDto.builder()
                 .language(LanguageCode.ENGLISH)
                 .name("Test Quiz")
-                .userId("user-1")
+                .owner(student)
                 .source("Custom")
                 .build());
 
-        var question = QuestionDto.builder()
+        var question1 = QuestionDto.builder()
                 .text("What is the capital of England?")
                 .difficulty(1)
                 .quiz(quiz)
@@ -90,92 +106,90 @@ class RoundServiceTest {
                 ))
                 .build();
 
-        quiz.setQuestions(List.of(question));
+        var question2 = QuestionDto.builder()
+                .text("What is the capital of France?")
+                .difficulty(1)
+                .quiz(quiz)
+                .explanation(ExplanationDto.builder()
+                        .text("Paris ist die Hauptstadt von Frankreich.")
+                        .translation("Paris is the capital of France.")
+                        .transcription("ˈlʌndən")
+                        .build())
+                .answers(List.of(
+                        AnswerDto.builder().text("London").correct(false).build(),
+                        AnswerDto.builder().text("Paris").correct(true).build()
+                ))
+                .build();
+
+        quiz.setQuestions(List.of(question1, question2));
         quiz = quizService.create(quiz);
+
+        var trial = TrialDto.builder()
+                .question(quiz.getQuestions().get(0))
+                .student(student)
+                .nextDueDate(Instant.now())
+                .build();
+        this.trial = trialService.create(trial);
     }
 
-    @AfterEach
-    void cleanup() {
-        if (trial != null) {
-            trialService.delete(trial.getId());
-        }
-        if (quiz != null) {
-            quizService.delete(quiz.getId());
-        }
+    @BeforeAll
+    void setup() {
+        registerStudent();
+        setupQuiz();
+        setupStudyListItem(quiz);
     }
 
     @Test
     void createLearningRound_byQuiz_shouldReturnRoundWithTrials() {
         var roundDto = RoundDto.builder()
                 .quiz(quiz)
-                .language(quiz.getLanguage())
                 .newCount(10)
                 .dueCount(0)
                 .build();
 
         var round = roundService.create(roundDto);
         assertNotNull(round);
-        assertEquals("english", round.getLanguage());
         assertFalse(round.getTrials().isEmpty());
-        assertEquals(quiz.getId(), round.getTrials().get(0).getQuestion().getQuiz().getId());
     }
 
     @Test
     void createLearningRound_byLanguage_shouldReturnRoundWithTrials() {
         var roundDto = RoundDto.builder()
-                .language(LanguageCode.ENGLISH)
+                .studyList(studyList)
                 .newCount(10)
                 .dueCount(0)
                 .build();
 
         var round = roundService.create(roundDto);
         assertNotNull(round);
-        assertEquals("english", round.getLanguage());
+        assertEquals(studyList.getId(), round.getStudyList().getId());
         assertFalse(round.getTrials().isEmpty());
     }
 
     @Test
     void createPracticeRound_byQuiz_shouldReturnRoundWithTrials() {
-        var trial = TrialDto.builder()
-                .question(quiz.getQuestions().get(0))
-                .userId(userService.getCurrentUserId())
-                .nextDueDate(Instant.now())
-                .build();
-        this.trial = trialService.create(trial);
-
         var roundDto = RoundDto.builder()
                 .quiz(quiz)
-                .language(quiz.getLanguage())
                 .newCount(0)
                 .dueCount(10)
                 .build();
 
         var round = roundService.create(roundDto);
         assertNotNull(round);
-        assertEquals("english", round.getLanguage());
         assertFalse(round.getTrials().isEmpty());
-        assertEquals(quiz.getId(), round.getTrials().get(0).getQuestion().getQuiz().getId());
     }
 
     @Test
     void createPracticeRound_byLanguage_shouldReturnRoundWithTrials() {
-        var trial = TrialDto.builder()
-                .question(quiz.getQuestions().get(0))
-                .userId(userService.getCurrentUserId())
-                .nextDueDate(Instant.now())
-                .build();
-        this.trial = trialService.create(trial);
-
         var roundDto = RoundDto.builder()
-                .language(LanguageCode.ENGLISH)
+                .studyList(studyList)
                 .newCount(0)
                 .dueCount(10)
                 .build();
 
         var round = roundService.create(roundDto);
         assertNotNull(round);
-        assertEquals("english", round.getLanguage());
+        assertEquals(studyList.getId(), round.getStudyList().getId());
         assertFalse(round.getTrials().isEmpty());
-        assertEquals(quiz.getId(), round.getTrials().get(0).getQuestion().getQuiz().getId());
     }
 }

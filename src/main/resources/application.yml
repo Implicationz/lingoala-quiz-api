@@ -5,3 +5,8 @@ spring:
       active: dev
     jpa:
       open-in-view: false
+lingosphinx:
+  gamification:
+    client:
+      api-key: ${GAMIFICATION_API_KEY}
+      url: ${GAMIFICATION_CLIENT_URL}

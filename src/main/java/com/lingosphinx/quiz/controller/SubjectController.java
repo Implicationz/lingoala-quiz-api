@@ -29,10 +29,10 @@ public class SubjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SubjectDto>> readAll() {
-        return ResponseEntity.ok(subjectService.readAll());
+    public ResponseEntity<List<SubjectDto>> readAll(@RequestParam(required = false) String name) {
+        var filter = (name != null && !name.isBlank());
+        return ResponseEntity.ok(filter ? subjectService.readAll(name) : subjectService.readAll());
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<SubjectDto> update(@PathVariable Long id, @RequestBody @Valid SubjectDto subject) {
         return ResponseEntity.ok(subjectService.update(id, subject));

@@ -8,11 +8,10 @@ import org.hibernate.annotations.BatchSize;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "trial", indexes = {
-    @Index(columnList = "user_id"),
+    @Index(columnList = "student_id"),
     @Index(columnList = "next_due_date")
 })
 @Getter
@@ -22,8 +21,8 @@ import java.util.UUID;
 @SuperBuilder
 public class Trial extends BaseEntity {
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @ManyToOne(optional = false)
+    private Student student;
 
     @Builder.Default
     @ManyToOne(fetch = FetchType.LAZY)

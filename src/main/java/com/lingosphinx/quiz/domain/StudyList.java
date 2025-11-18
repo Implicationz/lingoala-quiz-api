@@ -7,7 +7,6 @@ import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -16,12 +15,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 @Table(
-        uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "language"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "language"})
 )
 public class StudyList extends BaseEntity {
 
-    @Column(nullable = false)
-    private UUID userId;
+    @ManyToOne(optional = true)
+    private Student student;
 
     @Column(nullable = false)
     private LanguageCode language;

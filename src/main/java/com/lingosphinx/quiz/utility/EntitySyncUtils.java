@@ -1,4 +1,3 @@
-// src/main/java/com/lingosphinx/lesson/util/EntitySyncUtils.java
 package com.lingosphinx.quiz.utility;
 
 import java.util.List;

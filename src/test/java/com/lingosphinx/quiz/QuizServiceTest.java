@@ -3,9 +3,12 @@ package com.lingosphinx.quiz;
 import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.dto.*;
 import com.lingosphinx.quiz.service.QuizService;
+import com.lingosphinx.quiz.service.StudentService;
 import com.lingosphinx.quiz.service.SubjectService;
 import com.lingosphinx.quiz.service.TopicService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class QuizServiceTest {
 
     @Container
@@ -30,11 +34,16 @@ class QuizServiceTest {
             .withUsername("test")
             .withPassword("test");
 
+    static {
+        postgres.start();
+    }
+
     @DynamicPropertySource
     static void dbProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("GAMIFICATION_CLIENT_URL", () -> "localhost");
     }
 
     @Autowired
@@ -46,10 +55,21 @@ class QuizServiceTest {
     @Autowired
     private TopicService topicService;
 
+    @Autowired
+    private StudentService studentService;
+
+    private StudentDto student;
+
+    @BeforeAll
+    void registerStudent() {
+        studentService.register(StudentRegistrationDto.builder().build());
+        var read = studentService.readCurrent();
+        student = StudentDto.builder().id(read.getId()).build();
+    }
+
     private SubjectDto createSubject(String name) {
         return subjectService.create(SubjectDto.builder()
                 .name(name)
-                .language(LanguageCode.ENGLISH)
                 .build());
     }
 
@@ -64,7 +84,7 @@ class QuizServiceTest {
         return QuizDto.builder()
                 .language(LanguageCode.ENGLISH)
                 .name(name)
-                .userId(userId)
+                .owner(student)
                 .source("Custom")
                 .build();
     }
