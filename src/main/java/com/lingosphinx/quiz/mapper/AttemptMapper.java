@@ -1,10 +1,8 @@
 package com.lingosphinx.quiz.mapper;
 
 import com.lingosphinx.quiz.domain.Attempt;
-import com.lingosphinx.quiz.domain.Question;
 import com.lingosphinx.quiz.domain.Trial;
 import com.lingosphinx.quiz.dto.AttemptDto;
-import com.lingosphinx.quiz.dto.QuestionDto;
 import com.lingosphinx.quiz.dto.TrialDto;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;

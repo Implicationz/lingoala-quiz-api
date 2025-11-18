@@ -1,13 +1,7 @@
 package com.lingosphinx.quiz.service;
 
-import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.domain.Overview;
-import com.lingosphinx.quiz.domain.StudyList;
-import com.lingosphinx.quiz.repository.QuestionRepository;
-import com.lingosphinx.quiz.repository.QuestionSpecifications;
-import com.lingosphinx.quiz.repository.TrialRepository;
-import com.lingosphinx.quiz.repository.StudyListRepository;
-import com.lingosphinx.quiz.repository.TrialSpecifications;
+import com.lingosphinx.quiz.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

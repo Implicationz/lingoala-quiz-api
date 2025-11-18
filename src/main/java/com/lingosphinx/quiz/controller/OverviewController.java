@@ -1,6 +1,5 @@
 package com.lingosphinx.quiz.controller;
 
-import com.lingosphinx.quiz.domain.LanguageCode;
 import com.lingosphinx.quiz.domain.Overview;
 import com.lingosphinx.quiz.service.OverviewService;
 import io.swagger.v3.oas.annotations.tags.Tag;
