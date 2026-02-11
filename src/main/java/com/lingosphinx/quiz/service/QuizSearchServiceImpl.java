@@ -57,6 +57,7 @@ public class QuizSearchServiceImpl implements QuizSearchService {
         var goals = gamificationClient.getQuizGoals(quizSearch.getLanguage(), references);
         var hits = toHits(found, goals);
         var savedQuizSearch = QuizSearch.builder()
+                .language(quizSearch.getLanguage())
                 .subject(quizSearch.getSubject())
                 .topic(quizSearch.getTopic())
                 .hits(hits)
