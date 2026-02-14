@@ -66,7 +66,7 @@ public class QuizServiceImpl implements QuizService {
                 item -> item.setQuiz(existingQuiz),
                 (questionDto, question) -> {
                     quizMapper.updateEntityFromDto(questionDto, question);
-                    question.setQuiz(quizRepository.getReferenceById(questionDto.getQuiz().getId()));
+                    question.setQuiz(existingQuiz);
                 }
         );
         var savedQuiz = quizRepository.save(existingQuiz);
