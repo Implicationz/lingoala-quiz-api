@@ -304,4 +304,17 @@
     <changeSet author="Lutz (generated)" id="1763466736670-1">
         <modifyDataType columnName="name" newDataType="varchar(4092)" tableName="tag"/>
     </changeSet>
+    <changeSet author="Lutz (generated)" id="1771093613365-1">
+        <createIndex indexName="idxrb68wplg470cunqs2sl0odcxh" tableName="trial" using="btree">
+            <column name="student_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1771093613365-2">
+        <addUniqueConstraint columnNames="student_id, language" constraintName="uk758iaq470xbkeoyenn76g4mmu" tableName="study_list"/>
+    </changeSet>
+    <changeSet author="Lutz (generated)" id="1771093613365-4">
+        <addColumn tableName="question">
+            <column name="image" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

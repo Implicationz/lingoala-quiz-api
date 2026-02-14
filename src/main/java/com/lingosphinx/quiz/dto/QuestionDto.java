@@ -15,6 +15,7 @@ public class QuestionDto {
     private String text;
     private String translation;
     private String transcription;
+    private String image;
     private ExplanationDto explanation;
     @Builder.Default
     private List<AnswerDto> answers = new ArrayList<>();

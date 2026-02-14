@@ -29,6 +29,8 @@ public class Question extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String transcription;
 
+    private String image;
+
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "text", column = @Column(name = "explanation_text", columnDefinition = "TEXT")),
