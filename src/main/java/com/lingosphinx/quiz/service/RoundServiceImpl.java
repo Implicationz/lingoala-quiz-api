@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -71,7 +73,8 @@ public class RoundServiceImpl implements RoundService {
         }
         var dueTrials = this.dueTrials(student, studyList, round).toList();
         var newTrials = this.newTrials(student, studyList, round).toList();
-        var trials = Stream.concat(dueTrials.stream(), newTrials.stream()).toList();
+        var trials = Stream.concat(dueTrials.stream(), newTrials.stream())
+                .collect(Collectors.toCollection(ArrayList::new));
         var entity = Round.builder()
                 .studyList(round.getStudyList())
                 .quiz(round.getQuiz())
@@ -79,7 +82,7 @@ public class RoundServiceImpl implements RoundService {
                 .newCount(newTrials.size())
                 .dueCount(dueTrials.size())
                 .build();
-
+        entity.shuffle();
         return roundMapper.toDto(entity);
     }
 }

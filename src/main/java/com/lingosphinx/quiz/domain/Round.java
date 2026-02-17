@@ -22,9 +22,16 @@ public class Round {
     private List<Trial> trials = new ArrayList<>();
 
     public void shuffleAnswers() {
-        for (var trial : trials) {
-            Collections.shuffle(trial.getQuestion().getAnswers());
-        }
+        trials.forEach(Trial::shuffleAnswers);
+    }
+
+    public void shuffleQuestions() {
+        Collections.shuffle(this.trials);
+    }
+
+    public void shuffle() {
+        this.shuffleAnswers();
+        this.shuffleQuestions();
     }
 
     public void limitTrials(int count) {

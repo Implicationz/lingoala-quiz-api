@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -63,6 +64,10 @@ public class Question extends BaseEntity {
         for (var answer : answers) {
             answer.setQuestion(this);
         }
+    }
+
+    public void shuffleAnswers() {
+        Collections.shuffle(this.answers);
     }
 }
 

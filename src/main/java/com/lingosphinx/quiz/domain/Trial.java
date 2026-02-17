@@ -84,4 +84,9 @@ public class Trial extends BaseEntity {
             failure();
         }
     }
+
+
+    public void shuffleAnswers() {
+        this.question.shuffleAnswers();
+    }
 }
